@@ -6,6 +6,10 @@ if [[ -z "${BASE_PATH}" ]]; then
   BASE_PATH=$PWD
 fi
 
+if [[ -z "${CHAIN}" ]]; then
+  CHAIN=mainnet
+fi
+
 CONSTELLATION_BIN=$(which constellation-node)
 if [ $? -eq 0 ]
 then
@@ -38,10 +42,6 @@ then
   curl -L "${TESSERA_CONFIG_URL}" > "${TESSERA_CONFIG}" 2> /dev/nul
 
   ${TESSERA_BIN} -configfile "${TESSERA_CONFIG}" &
-fi
-
-if [[ -z "${CHAIN}" ]]; then
-  CHAIN=mainnet
 fi
 
 if [[ -z "${CHAIN_SPEC}" ]]; then
