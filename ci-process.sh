@@ -37,6 +37,4 @@ sudo docker build -t provide.network/node .
 # TODO: update provide.network/node repository image in all supported availability zones
 # TODO: dispatch message to listeners watching for version updates
 
-# Finalization
-popd &>/dev/null
 echo '....CI process completed....'
