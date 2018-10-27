@@ -2,7 +2,7 @@
 
 This is an all-in-one node compatible with blockchains configured with compatibility for the provide.network.
 
-The following EVM clients are made available by 
+The following EVM clients are made available in this dockerized package:
 
   - Parity
   - Geth
