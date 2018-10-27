@@ -29,9 +29,6 @@ bootstrap_environment()
 
 # Preparation
 echo '....Running the full continuous integration process....'
-scriptDir=`dirname $0`
-pushd "${scriptDir}/.." &>/dev/null
-echo 'Working Directory =' `pwd`
 bootstrap_environment
 
 echo '....[PRVD] Docker Build....'
