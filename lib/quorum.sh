@@ -24,12 +24,17 @@ then
   fi
   curl -L "${CONSTELLATION_CONFIG_URL}" > "${CONSTELLATION_CONFIG}" 2> /dev/nul
 
-  ${CONSTELLATION_BIN} "${CONSTELLATION_CONFIG}" &
+  if [ ! -f "${CONSTELLATION_CONFIG}" ] || [ ! -s "${CONSTELLATION_CONFIG}" ]; then
+    ${CONSTELLATION_BIN} &
+  else
+    ${CONSTELLATION_BIN} "${CONSTELLATION_CONFIG}" &
+  fi
 fi
 
-TESSERA_BIN=$(which tessera)
-if [ $? -eq 0 ]
+TESSERA_JAR=/opt/tessera-app.jar
+if [ -f "${TESSERA_JAR}" ]
 then
+  TESSERA_BIN="java -jar ${TESSERA_JAR}"
   echo "Tessera starting; bin: ${TESSERA_BIN}"
   
   if [[ -z "${TESSERA_CONFIG}" ]]; then
@@ -41,7 +46,11 @@ then
   fi
   curl -L "${TESSERA_CONFIG_URL}" > "${TESSERA_CONFIG}" 2> /dev/nul
 
-  ${TESSERA_BIN} -configfile "${TESSERA_CONFIG}" &
+  if [ ! -f "${TESSERA_CONFIG}" ] || [ ! -s "${TESSERA_CONFIG}" ]; then
+    ${TESSERA_BIN} &
+  else
+    ${TESSERA_BIN} -configfile "${TESSERA_CONFIG}" &
+  fi
 fi
 
 if [[ -z "${CHAIN_SPEC}" ]]; then
@@ -66,7 +75,7 @@ if [[ -z "${BOOTNODES}" ]]; then
 fi
 
 if [[ -z "${LOG_PATH}" ]]; then
-  LOG_PATH="${BASE_PATH}/parity.log"
+  LOG_PATH="${BASE_PATH}/quorum.log"
 fi
 
 if [[ -z "${PORT}" ]]; then

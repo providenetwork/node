@@ -43,7 +43,7 @@ RUN /bin/bash -c 'curl https://github.com/jpmorganchase/constellation/releases/d
 RUN /bin/bash -c 'tar xvvf constellation-0.3.5-ubuntu1604.tar.gz && cp constellation-node /usr/local/bin/constellation-node'
 
 # Tessera installation
-RUN /bin/bash -c 'curl https://github.com/jpmorganchase/tessera/releases/download/tessera-0.6/tessera-app-0.6-app.jar -L > /opt/tessera-app.jar && alias tessera="java -jar /opt/tessera-app.jar"'
+RUN /bin/bash -c 'curl https://github.com/jpmorganchase/tessera/releases/download/tessera-0.6/tessera-app-0.6-app.jar -L > /opt/tessera-app.jar'
 
 EXPOSE 53
 EXPOSE 5001
