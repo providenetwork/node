@@ -132,10 +132,6 @@ if [[ -z "${IDENTITY}" ]]; then
   IDENTITY=
 fi
 
-if [[ -z "${GC_MODE}" ]]; then
-  GC_MODE=archive
-fi
-
 if [[ -z "${SYNC_MODE}" ]]; then
   SYNC_MODE=light
 fi
@@ -149,7 +145,6 @@ then
               --networkid "${CHAIN}" \
               --bootnodes "${BOOTNODES}" \
               --trace "${LOG_PATH}" \
-              --gcmode "${GC_MODE}" \
               --port $PORT \
               --rpc \
               --rpcapi $JSON_RPC_APIS \
