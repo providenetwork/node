@@ -37,7 +37,7 @@ then
   fi
 
   if [[ -z "${TESSERA_CONFIG_URL}" ]]; then
-    TESSERA_CONFIG_URL="https://raw.githubusercontent.com/providenetwork/chain-spec/${CHAIN}/tessera.conf"
+    TESSERA_CONFIG_URL="https://raw.githubusercontent.com/providenetwork/chain-spec/${CHAIN}/tessera.json"
   fi
   curl -L "${TESSERA_CONFIG_URL}" > "${TESSERA_CONFIG}" 2> /dev/nul
 
