@@ -5,7 +5,7 @@ WORKDIR /opt
 
 RUN apt-get update -qq && apt-get upgrade -y && apt-get install -y sudo unattended-upgrades curl golang-go wget
 RUN wget -qO- https://deb.nodesource.com/setup_10.x | sudo -E bash -
-RUN apt-get install -y build-essential automake libcap2-bin libtool unbound dnsutils libunbound-dev nodejs
+RUN apt-get install -y build-essential automake libcap2-bin libtool libsodium-dev unbound dnsutils libunbound-dev nodejs
 RUN ln -s $(which nodejs) /usr/local/bin/node
 RUN echo -e "APT::Periodic::Update-Package-Lists \"1\";\nAPT::Periodic::Unattended-Upgrade \"1\";\n" > /etc/apt/apt.conf.d/20auto-upgrades
 
