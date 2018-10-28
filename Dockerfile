@@ -5,7 +5,7 @@ WORKDIR /opt
 
 RUN apt-get update -qq && apt-get upgrade -y && apt-get install -y sudo unattended-upgrades curl golang-go wget
 RUN wget -qO- https://deb.nodesource.com/setup_10.x | sudo -E bash -
-RUN apt-get install -y build-essential automake default-jre libcap2-bin libtool libsodium-dev unbound dnsutils libunbound-dev nodejs
+RUN apt-get install -y build-essential automake default-jre libcap2-bin libtool libsodium-dev python3-pip python-setuptools unbound dnsutils libunbound-dev nodejs
 RUN ln -s $(which nodejs) /usr/local/bin/node
 RUN echo -e "APT::Periodic::Update-Package-Lists \"1\";\nAPT::Periodic::Unattended-Upgrade \"1\";\n" > /etc/apt/apt.conf.d/20auto-upgrades
 
@@ -44,6 +44,9 @@ RUN /bin/bash -c 'tar xvvf constellation-0.3.5-ubuntu1604.tar.gz && cp constella
 
 # Tessera installation
 RUN /bin/bash -c 'curl https://github.com/jpmorganchase/tessera/releases/download/tessera-0.6/tessera-app-0.6-app.jar -L > /opt/tessera-app.jar'
+
+# remarshal installation
+RUN /bin/bash -c 'git clone https://github.com/dbohdan/remarshal.git && pushd remarshal && python setup.py install && popd'
 
 EXPOSE 53
 EXPOSE 5001

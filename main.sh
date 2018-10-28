@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 if [[ -z "${CLIENT}" ]]; then
-  CLIENT=parity
+  CLIENT=quorum
+  if [[ -z "${CONSENSYS}" ]]; then
+    CONSENSYS=instanbul
+  fi
 fi
 
 if [[ -z "${IPFS_DAEMON}" ]]; then

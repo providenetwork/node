@@ -12,13 +12,13 @@ fi
 
 if [[ -z "${CHAIN_SPEC}" ]]; then
   CHAIN_SPEC=${BASE_PATH}/ewasm-spec.json
+fi
 
-  if [ ! -f "${CHAIN_SPEC}" ] || [ ! -s "${CHAIN_SPEC}" ]; then
-    if [[ -z "${CHAIN_SPEC_URL}" ]]; then
-      CHAIN_SPEC_URL="https://raw.githubusercontent.com/ewasm/testnet/${CHAIN}/ewasm-testnet-cpp-config.json"
-    fi
-    curl "${CHAIN_SPEC_URL}" > "${CHAIN_SPEC}" 2> /dev/null
+if [ ! -f "${CHAIN_SPEC}" ] || [ ! -s "${CHAIN_SPEC}" ]; then
+  if [[ -z "${CHAIN_SPEC_URL}" ]]; then
+    CHAIN_SPEC_URL="https://raw.githubusercontent.com/ewasm/testnet/${CHAIN}/ewasm-testnet-cpp-config.json"
   fi
+  curl "${CHAIN_SPEC_URL}" > "${CHAIN_SPEC}" 2> /dev/null
 fi
 
 if [[ -z "${PEER_SET}" ]]; then
