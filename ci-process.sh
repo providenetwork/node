@@ -11,25 +11,57 @@ die()
 }
 echo Executing $0 $*
 
-bootstrap_environment() 
+setup_deployment_tools() 
 {
-    echo '....Setting up environment....'
+    if hash python 2>/dev/null
+    then
+        echo 'Using: ' 
+        python --version
+    else
+        echo 'Installing python'
+        sudo apt-get update
+        sudo apt-get -y install python2.7
+    fi
+    if hash pip 2>/dev/null
+    then
+        echo 'Using' `pip --version`
+    else
+        echo 'Installing python'
+        sudo apt-get update
+        sudo apt-get -y install python-pip
+    fi
+    if hash aws 2>/dev/null
+    then
+        echo 'Using AWS CLI: ' 
+        aws --version
+    else
+        echo 'Installing AWS CLI'
+        pip install awscli --upgrade --user
+    fi
     if hash docker 2>/dev/null
     then
         echo 'Using docker' `docker -v`
     else
         echo 'Installing docker'
+        sudo apt-get update
         sudo apt-get install -y apt-transport-https \
                                 ca-certificates \
                                 software-properties-common
         sudo apt-get install -y docker
     fi
-    echo '....Environment setup complete....'
+    if hash jq 2>/dev/null
+    then
+        echo 'Using' `jq --version`
+    else
+        echo 'Installing jq'
+        sudo apt-get update
+        sudo apt-get -y install jq
+    fi
 }
 
 # Preparation
 echo '....Running the full continuous integration process....'
-bootstrap_environment
+setup_deployment_tools
 
 echo '....[PRVD] Docker Build....'
 sudo docker build -t provide.network/node .
