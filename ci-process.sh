@@ -38,10 +38,10 @@ sudo docker build -t provide.network/node .
 echo '....[PRVD] Docker Build....'
 sudo docker build -t provide.network/node .
 echo '....[PRVD] Docker Tag....'
-sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.us-east-1.amazonaws.com/provide.network/node:${buildRef}"
+sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.us-east-1.amazonaws.com/provide.network/node:latest"
 echo '....[PRVD] Docker Push....'
 $(aws ecr get-login --no-include-email --region us-east-1)
-sudo docker push "085843810865.dkr.ecr.us-east-1.amazonaws.com/provide.network/node:${buildRef}"
+sudo docker push "085843810865.dkr.ecr.us-east-1.amazonaws.com/provide.network/node:latest"
 
 # TODO: dispatch message to listeners watching for version updates
 
