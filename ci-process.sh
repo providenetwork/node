@@ -57,6 +57,7 @@ setup_deployment_tools()
         sudo apt-get update
         sudo apt-get -y install jq
     fi
+    export PATH=~/.local/bin:$PATH
 }
 
 # Preparation
