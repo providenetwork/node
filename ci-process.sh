@@ -35,6 +35,14 @@ echo '....[PRVD] Docker Build....'
 sudo docker build -t provide.network/node .
 
 # TODO: update provide.network/node repository image in all supported availability zones
+echo '....[PRVD] Docker Build....'
+sudo docker build -t provide.network/node .
+echo '....[PRVD] Docker Tag....'
+sudo docker tag provide/goldmine:latest "085843810865.dkr.ecr.us-east-1.amazonaws.com/provide.network/node:${buildRef}"
+echo '....[PRVD] Docker Push....'
+$(aws ecr get-login --no-include-email --region us-east-1)
+sudo docker push "085843810865.dkr.ecr.us-east-1.amazonaws.com/provide.network/node:${buildRef}"
+
 # TODO: dispatch message to listeners watching for version updates
 
 echo '....CI process completed....'
