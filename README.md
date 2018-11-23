@@ -8,7 +8,7 @@ The following EVM-based clients and protocols are currently supported (in no par
 
   - [Parity](https://wiki.parity.io/Parity-Ethereum) - [Authority Round PoA](https://wiki.parity.io/Aura)
   - [Geth](https://github.com/ethereum/go-ethereum/wiki/geth)
-  - [Quorum](https://github.com/jpmorganchase/quorum) - [IBFT](https://github.com/ethereum/EIPs/issues/650) and [Raft](https://raft.github.io)
+  - [Quorum](https://github.com/jpmorganchase/quorum) - [IBFT](https://github.com/ethereum/EIPs/issues/650) with [Constellation](https://github.com/jpmorganchase/constellation); ~~[Raft](https://raft.github.io)~~ (supported in `quorum.sh` but effort is being spent toward hardening and scaling IBFT)
   - [ewasm](https://github.com/ewasm/design) - [ewasm testnet PR #50](https://github.com/ewasm/testnet/pull/50)
 
 ## Bcoin Support
