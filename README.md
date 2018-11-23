@@ -6,9 +6,9 @@ This is an all-in-one node that is compatible with select blockchain protocols a
 
 The following EVM-based clients and protocols are currently supported (in no particular order):
 
-  - [Parity](https://wiki.parity.io/Parity-Ethereum) - [Authority Round PoA](https://wiki.parity.io/Aura)
-  - [Geth](https://github.com/ethereum/go-ethereum/wiki/geth)
-  - [Quorum](https://github.com/jpmorganchase/quorum) - [IBFT](https://github.com/ethereum/EIPs/issues/650) with [Constellation](https://github.com/jpmorganchase/constellation); ~~[Raft](https://raft.github.io)~~ (supported in `quorum.sh`)
+  - [Parity](https://wiki.parity.io/Parity-Ethereum) - [Authority Round PoA](https://wiki.parity.io/Aura); a highly-upgradeable Aura implementation lives in [this repo](https://github.com/providenetwork/network-consensus-contracts); ~~PoW~~ supported (`parity.sh`)
+  - [Geth](https://github.com/ethereum/go-ethereum/wiki/geth) vanilla Clique PoA & PoW supported (`geth.sh`)
+  - [Quorum](https://github.com/jpmorganchase/quorum) - [IBFT](https://github.com/ethereum/EIPs/issues/650) with [Constellation](https://github.com/jpmorganchase/constellation); ~~[Raft](https://raft.github.io)~~ (`quorum.sh`)
   - [ewasm](https://github.com/ewasm/design) - [ewasm testnet PR #50](https://github.com/ewasm/testnet/pull/50)
 
 ## Bcoin Support
@@ -19,7 +19,7 @@ The following [Bcoin](https://bcoin.io) protocols are supported:
 
 ## IPFS Support
 
-By default, regardless of the client/protocol implementation targeted for execution, the container starts a local IPFS daemon which should be added to a load-balanced IPFS network.
+By default, regardless of the client/protocol implementation targeted for execution, the container starts a local IPFS daemon which should be added to a load-balanced IPFS network. Environment support for configuring the IPFS daemon to connect to a private swarm exists; documentation forthcoming.
 
 ### Dockerfile
 
