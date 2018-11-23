@@ -19,7 +19,7 @@ The following [Bcoin](https://bcoin.io) protocols are supported:
 
 ## IPFS Support
 
-By default, regardless of the client/protocol implementation targeted for execution, the container starts a local IPFS daemon which should be added to a load-balanced IPFS network. Environment support for configuring the IPFS daemon to connect to a private swarm exists; documentation forthcoming.
+By default, regardless of the client/protocol implementation targeted for execution, the container starts a local IPFS daemon which should be added to a load-balanced IPFS network. Environment support for configuring the IPFS daemon to connect to a private network; documentation forthcoming.
 
 ### Dockerfile
 
