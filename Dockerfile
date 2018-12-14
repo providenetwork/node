@@ -12,6 +12,7 @@ RUN echo -e "APT::Periodic::Update-Package-Lists \"1\";\nAPT::Periodic::Unattend
 RUN wget https://dl.google.com/go/go1.10.3.linux-amd64.tar.gz
 RUN tar -xvf go1.10.3.linux-amd64.tar.gz
 RUN mv go /usr/local
+ENV PATH="${PATH}:/usr/local/go/bin"
 
 RUN mkdir -p /opt/provide.network
 RUN touch /opt/spec.json
