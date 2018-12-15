@@ -64,6 +64,10 @@ if [[ -z "$HSD_SEEDS" ]]; then
 am2lsmbzzxncaptqjo22jay3mztfwl33bxhkp7icfx7kmi5rvjaic@139.162.183.168"
 fi
 
+if [[ -z "$HSD_INDEX_TX" ]]; then
+  HSD_INDEX_TX=true
+fi
+
 echo "option domain_name, host_name" > /etc/dhcpcd.conf
 echo "nameserver ${HSD_HOST}" | sudo tee /etc/resolv.conf > /dev/null
 setcap 'cap_net_bind_service=+ep' $HANDSHAKE_BIN
@@ -81,7 +85,9 @@ if [ "$HSD_SPV" = "false" ]; then
                  --max-outbound=${HSD_MAX_OUTBOUND} \
                  --seeds="${HSD_SEEDS}" \
                  --bip37=${HSD_BIP37} \
-                 --http-host=${HSD_HTTP_HOST}
+                 --http-host=${HSD_HTTP_HOST} \
+                 --log-level=${LOGGING} \
+                 --index-tx=${HSD_INDEX_TX}
 else
   echo "provide.network handshake (HNS) SPV resolver daemon starting in ${PWD}; hnsd bin: ${HANDSHAKE_BIN}"
   $HANDSHAKE_BIN
