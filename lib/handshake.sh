@@ -59,13 +59,17 @@ if [[ -z "$HSD_HTTP_HOST" ]]; then
   HSD_HTTP_HOST=0.0.0.0
 fi
 
+if [[ -z "$HSD_HTTP_PORT" ]]; then
+  HSD_HTTP_PORT=12039 # default to mainnet
+fi
+
 if [[ -z "$HSD_SEEDS" ]]; then
   HSD_SEEDS="aoihqqagbhzz6wxg43itefqvmgda4uwtky362p22kbimcyg5fdp54@172.104.214.189,ajdzrpoxsusaw4ixq4ttibxxsuh5fkkduc5qszyboidif2z25i362@173.255.209.126,ajk57wutnhfdzvqwqrgab3wwh4wxoqgnkz4avbln54pgj5jwefcts@172.104.177.177
 am2lsmbzzxncaptqjo22jay3mztfwl33bxhkp7icfx7kmi5rvjaic@139.162.183.168"
 fi
 
 if [[ -z "$HSD_API_KEY" ]]; then
-  HSD_API_KEY=true
+  HSD_API_KEY=some-key
 fi
 
 if [[ -z "$HSD_CORS" ]]; then
@@ -89,8 +93,8 @@ if [ "$HSD_SPV" = "false" ]; then
   $HANDSHAKE_BIN --prefix="${BASE_PATH}" \
                  --network=${HSD_NETWORK} \
                  --listen=${HSD_LISTEN} \
-                 --host=${HSD_HOST} \
-                 --port=${HSD_PORT} \
+                 --node-host=${HSD_HOST} \
+                 --node-port=${HSD_PORT} \
                  --http-host=${HSD_HTTP_HOST} \
                  --http-port=${HSD_HTTP_PORT} \
                  --public-host=${HSD_PUBLIC_HOST} \
