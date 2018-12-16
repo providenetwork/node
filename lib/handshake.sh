@@ -108,8 +108,7 @@ if [ "$HSD_SPV" = "false" ]; then
                  --index-tx=${HSD_INDEX_TX} \
                  --index-tx=${HSD_INDEX_TX} \
                  --api-key=${HSD_API_KEY} \
-                 --cors=${HSD_CORS} \
-                 --daemon
+                 --cors=${HSD_CORS}
 else
   echo "provide.network handshake (HNS) SPV node starting in ${PWD}; hnsd bin: ${HANDSHAKE_BIN}"
   $HANDSHAKE_BIN --prefix="${BASE_PATH}" \
@@ -131,6 +130,5 @@ else
                  --index-tx=${HSD_INDEX_TX} \
                  --api-key=${HSD_API_KEY} \
                  --cors=${HSD_CORS} \
-                 --spv \
-                 --daemon
+                 --spv
 fi
