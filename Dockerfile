@@ -29,8 +29,8 @@ RUN /bin/bash -c 'curl https://gethstore.blob.core.windows.net/builds/geth-linux
 RUN /bin/bash -c 'tar xvvf geth-linux-amd64-1.8.17-8bbe7207.tar.gz && cp geth-linux-amd64-1.8.17-8bbe7207/geth /usr/local/bin'
 
 # Handshake (HNS) installation
-RUN /bin/bash -c 'git clone git://github.com/handshake-org/hsd.git && pushd hsd && npm install --production && cp ./bin/hsd /usr/local/bin/hsd && popd'
-RUN /bin/bash -c 'git clone git://github.com/handshake-org/hnsd.git && pushd hnsd && ./autogen.sh && ./configure && make && cp ./hnsd /usr/local/bin/hnsd && popd'
+RUN /bin/bash -c 'git clone git://github.com/handshake-org/hsd.git && mv hsd /opt/provide.network/hsd && pushd /opt/provide.network/hsd && npm install --production && popd'
+RUN /bin/bash -c 'git clone git://github.com/handshake-org/hnsd.git && mv hnsd /opt/provide.network/hnsd && pushd /opt/provide.network/hnsd && ./autogen.sh && ./configure && make && popd'
 
 # IPFS installation
 RUN /bin/bash -c 'curl https://dist.ipfs.io/go-ipfs/v0.4.17/go-ipfs_v0.4.17_linux-amd64.tar.gz -L > go-ipfs_v0.4.17_linux-amd64.tar.gz'

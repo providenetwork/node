@@ -11,6 +11,10 @@ if [[ -z "${HSD_SPV}" ]]; then
 fi
 
 HANDSHAKE_BIN=$(which hsd)
+if [ $? -ne 0 ]; then
+  HANDSHAKE_BIN="${HSD_PREFIX}/bin/hsd"
+fi
+
 if [ "$HSD_SPV" = "true" ]; then
   HANDSHAKE_BIN=$(which hnsd)
 fi
@@ -90,7 +94,7 @@ setcap 'cap_net_bind_service=+ep' $HANDSHAKE_BIN
 
 if [ "$HSD_SPV" = "false" ]; then
   echo "provide.network handshake (HNS) full node starting in ${PWD}; hsd bin: ${HANDSHAKE_BIN}"
-  $HANDSHAKE_BIN --prefix="${BASE_PATH}" \
+  $HANDSHAKE_BIN --prefix="${HSD_PREFIX}" \
                  --network=${HSD_NETWORK} \
                  --listen=${HSD_LISTEN} \
                  --host=${HSD_HOST} \
@@ -111,7 +115,7 @@ if [ "$HSD_SPV" = "false" ]; then
                  --cors=${HSD_CORS}
 else
   echo "provide.network handshake (HNS) SPV node starting in ${PWD}; hnsd bin: ${HANDSHAKE_BIN}"
-  $HANDSHAKE_BIN --prefix="${BASE_PATH}" \
+  $HANDSHAKE_BIN --prefix="${HSD_PREFIX}" \
                  --network=${HSD_NETWORK} \
                  --listen=${HSD_LISTEN} \
                  --host=${HSD_HOST} \
