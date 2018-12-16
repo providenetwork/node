@@ -64,6 +64,18 @@ if [[ -z "$HSD_SEEDS" ]]; then
 am2lsmbzzxncaptqjo22jay3mztfwl33bxhkp7icfx7kmi5rvjaic@139.162.183.168"
 fi
 
+if [[ -z "$HSD_API_KEY" ]]; then
+  HSD_API_KEY=true
+fi
+
+if [[ -z "$HSD_CORS" ]]; then
+  HSD_CORS=true
+fi
+
+if [[ -z "$HSD_INDEX_ADDRESS" ]]; then
+  HSD_INDEX_ADDRESS=true
+fi
+
 if [[ -z "$HSD_INDEX_TX" ]]; then
   HSD_INDEX_TX=true
 fi
@@ -79,6 +91,8 @@ if [ "$HSD_SPV" = "false" ]; then
                  --listen=${HSD_LISTEN} \
                  --host=${HSD_HOST} \
                  --port=${HSD_PORT} \
+                 --http-host=${HSD_HTTP_HOST} \
+                 --http-port=${HSD_HTTP_PORT} \
                  --public-host=${HSD_PUBLIC_HOST} \
                  --public-port=${HSD_PUBLIC_PORT} \
                  --pool-size=${HSD_POOL_SIZE} \
@@ -87,8 +101,30 @@ if [ "$HSD_SPV" = "false" ]; then
                  --bip37=${HSD_BIP37} \
                  --http-host=${HSD_HTTP_HOST} \
                  --log-level=${LOGGING} \
-                 --index-tx=${HSD_INDEX_TX}
+                 --index-tx=${HSD_INDEX_TX} \
+                 --index-tx=${HSD_INDEX_TX} \
+                 --api-key=${HSD_API_KEY} \
+                 --cors=${HSD_CORS}
 else
-  echo "provide.network handshake (HNS) SPV resolver daemon starting in ${PWD}; hnsd bin: ${HANDSHAKE_BIN}"
-  $HANDSHAKE_BIN
+  echo "provide.network handshake (HNS) SPV node starting in ${PWD}; hnsd bin: ${HANDSHAKE_BIN}"
+  $HANDSHAKE_BIN --prefix="${BASE_PATH}" \
+                 --network=${HSD_NETWORK} \
+                 --listen=${HSD_LISTEN} \
+                 --host=${HSD_HOST} \
+                 --port=${HSD_PORT} \
+                 --http-host=${HSD_HTTP_HOST} \
+                 --http-port=${HSD_HTTP_PORT} \
+                 --public-host=${HSD_PUBLIC_HOST} \
+                 --public-port=${HSD_PUBLIC_PORT} \
+                 --pool-size=${HSD_POOL_SIZE} \
+                 --max-outbound=${HSD_MAX_OUTBOUND} \
+                 --seeds="${HSD_SEEDS}" \
+                 --bip37=${HSD_BIP37} \
+                 --http-host=${HSD_HTTP_HOST} \
+                 --log-level=${LOGGING} \
+                 --index-tx=${HSD_INDEX_TX} \
+                 --index-tx=${HSD_INDEX_TX} \
+                 --api-key=${HSD_API_KEY} \
+                 --cors=${HSD_CORS} \
+                 --spv
 fi
