@@ -4,6 +4,8 @@ PWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [[ -z "${BASE_PATH}" ]]; then
   HSD_PREFIX=$PWD
+else
+  HSD_PREFIX=$BASE_PATH
 fi
 
 if [[ -z "${HSD_SPV}" ]]; then
@@ -40,7 +42,7 @@ if [[ -z "$HSD_PORT" ]]; then
 fi
 
 if [[ -z "$HSD_PUBLIC_HOST" ]]; then
-  HSD_PUBLIC_HOST=$(hostname)
+  HSD_PUBLIC_HOST=0.0.0.0
 fi
 
 if [[ -z "$HSD_PUBLIC_PORT" ]]; then
@@ -107,7 +109,6 @@ if [ "$HSD_SPV" = "false" ]; then
                  --max-outbound=${HSD_MAX_OUTBOUND} \
                  --seeds="${HSD_SEEDS}" \
                  --bip37=${HSD_BIP37} \
-                 --http-host=${HSD_HTTP_HOST} \
                  --log-level=${LOGGING} \
                  --index-tx=${HSD_INDEX_TX} \
                  --index-tx=${HSD_INDEX_TX} \
