@@ -74,10 +74,6 @@ if [[ -z "$HSD_SEEDS" ]]; then
 am2lsmbzzxncaptqjo22jay3mztfwl33bxhkp7icfx7kmi5rvjaic@139.162.183.168"
 fi
 
-if [[ -z "$HSD_API_KEY" ]]; then
-  HSD_API_KEY=some-key
-fi
-
 if [[ -z "$HSD_CORS" ]]; then
   HSD_CORS=true
 fi
@@ -110,7 +106,7 @@ if [ "$HSD_SPV" = "false" ]; then
                  --seeds="${HSD_SEEDS}" \
                  --bip37=${HSD_BIP37} \
                  --log-level=${LOGGING} \
-                 --index-tx=${HSD_INDEX_TX} \
+                 --index-address=${HSD_INDEX_ADDRESS} \
                  --index-tx=${HSD_INDEX_TX} \
                  --api-key=${HSD_API_KEY} \
                  --cors=${HSD_CORS} \
@@ -132,7 +128,7 @@ else
                  --bip37=${HSD_BIP37} \
                  --http-host=${HSD_HTTP_HOST} \
                  --log-level=${LOGGING} \
-                 --index-tx=${HSD_INDEX_TX} \
+                 --index-address=${HSD_INDEX_ADDRESS} \
                  --index-tx=${HSD_INDEX_TX} \
                  --api-key=${HSD_API_KEY} \
                  --cors=${HSD_CORS} \
