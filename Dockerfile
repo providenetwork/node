@@ -31,6 +31,8 @@ RUN /bin/bash -c 'tar xvvf geth-linux-amd64-1.8.17-8bbe7207.tar.gz && cp geth-li
 # Handshake (HNS) installation
 RUN /bin/bash -c 'git clone git://github.com/handshake-org/hsd.git && pushd ./hsd && npm install --production && popd'
 RUN /bin/bash -c 'git clone git://github.com/handshake-org/hnsd.git && pushd ./hnsd && ./autogen.sh && ./configure && make && popd'
+# HNScan installation
+RUN /bin/bash -c 'git clone git://github.com/providenetwork/hnscan.git && pushd ./hnscan && npm install && popd'
 
 # IPFS installation
 RUN /bin/bash -c 'curl https://dist.ipfs.io/go-ipfs/v0.4.17/go-ipfs_v0.4.17_linux-amd64.tar.gz -L > go-ipfs_v0.4.17_linux-amd64.tar.gz'

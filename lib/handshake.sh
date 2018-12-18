@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source ./hnscan.sh
+
 PWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [[ -z "${BASE_PATH}" ]]; then
