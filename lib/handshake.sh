@@ -69,15 +69,6 @@ if [[ -z "$HSD_HTTP_PORT" ]]; then
   HSD_HTTP_PORT=12039 # default to mainnet
 fi
 
-if [[ -z "$HSD_SEEDS" ]]; then
-  HSD_SEEDS="aoihqqagbhzz6wxg43itefqvmgda4uwtky362p22kbimcyg5fdp54@172.104.214.189,ajdzrpoxsusaw4ixq4ttibxxsuh5fkkduc5qszyboidif2z25i362@173.255.209.126,ajk57wutnhfdzvqwqrgab3wwh4wxoqgnkz4avbln54pgj5jwefcts@172.104.177.177
-am2lsmbzzxncaptqjo22jay3mztfwl33bxhkp7icfx7kmi5rvjaic@139.162.183.168"
-fi
-
-if [[ -z "$HSD_NODES" ]]; then
-  HSD_NODES="138.68.6.54:13038,104.199.132.250:13038,69.137.88.223:13038,136.30.34.59:13038,51.15.85.238:13038,103.217.167.6:13038,157.131.160.182:13038"
-fi
-
 if [[ -z "$HSD_CORS" ]]; then
   HSD_CORS=true
 fi
