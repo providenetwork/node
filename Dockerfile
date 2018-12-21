@@ -56,6 +56,7 @@ RUN /bin/bash -c 'curl https://github.com/jpmorganchase/tessera/releases/downloa
 RUN /bin/bash -c 'git clone https://github.com/dbohdan/remarshal.git && pushd remarshal && python setup.py install && popd'
 
 EXPOSE 53
+EXPOSE 4000
 EXPOSE 5001
 EXPOSE 5300
 EXPOSE 8050
@@ -63,13 +64,17 @@ EXPOSE 8051
 EXPOSE 8080
 EXPOSE 9001
 EXPOSE 12037
-EXPOSE 12037
+EXPOSE 12038
 EXPOSE 12039
 EXPOSE 13037
 EXPOSE 13038
 EXPOSE 13039
 EXPOSE 14037
+EXPOSE 14038
+EXPOSE 14039
 EXPOSE 15037
+EXPOSE 15038
+EXPOSE 15039
 EXPOSE 15349
 EXPOSE 15350
 EXPOSE 15359
