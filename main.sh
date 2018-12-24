@@ -15,7 +15,9 @@ if [ "$IPFS_DAEMON" = "true" ]; then
   source ./ipfs.sh
 fi
 
-if [ "$CLIENT" = "geth" ]; then
+if [ "$CLIENT" = "bcoin" ]; then
+  source ./bcoin.sh
+elif [ "$CLIENT" = "geth" ]; then
   source ./geth.sh
 elif [ "$CLIENT" = "parity" ]; then
   source ./parity.sh
