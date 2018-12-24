@@ -19,10 +19,6 @@ if [ $? -ne 0 ]; then
   HANDSHAKE_BIN="${HSD_PREFIX}/bin/hsd"
 fi
 
-if [ "$HSD_SPV" = "true" ]; then
-  HANDSHAKE_BIN=$(which hnsd)
-fi
-
 if [[ -z "${HSD_NETWORK}" ]]; then
   HSD_NETWORK=mainnet
 fi
@@ -40,7 +36,17 @@ if [[ -z "$HSD_HOST" ]]; then
 fi
 
 if [[ -z "$HSD_PORT" ]]; then
-  HSD_PORT=5300
+  if [ "${HSD_NETWORK}" == "mainnet" ]; then
+    HSD_PORT=12038
+  elif [ "${HSD_NETWORK}" == "testnet" ]; then
+    HSD_PORT=13038
+  elif [ "${HSD_NETWORK}" == "regtest" ]; then
+    HSD_PORT=14038
+  elif [ "${HSD_NETWORK}" == "simtest" ]; then
+    HSD_PORT=15038
+  else
+    HSD_PORT=12038
+  fi
 fi
 
 if [[ -z "$HSD_PUBLIC_HOST" ]]; then
@@ -48,7 +54,17 @@ if [[ -z "$HSD_PUBLIC_HOST" ]]; then
 fi
 
 if [[ -z "$HSD_PUBLIC_PORT" ]]; then
-  HSD_PUBLIC_PORT=5300
+  if [ "${HSD_NETWORK}" == "mainnet" ]; then
+    HSD_PUBLIC_PORT=12038
+  elif [ "${HSD_NETWORK}" == "testnet" ]; then
+    HSD_PUBLIC_PORT=13038
+  elif [ "${HSD_NETWORK}" == "regtest" ]; then
+    HSD_PUBLIC_PORT=14038
+  elif [ "${HSD_NETWORK}" == "simtest" ]; then
+    HSD_PUBLIC_PORT=15038
+  else
+    HSD_PUBLIC_PORT=$HSD_PORT
+  fi
 fi
 
 if [[ -z "$HSD_POOL_SIZE" ]]; then
