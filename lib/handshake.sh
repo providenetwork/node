@@ -116,7 +116,7 @@ if [ "$HSD_SPV" = "false" ]; then
                  --log-level=${LOGGING} \
                  --index-address=${HSD_INDEX_ADDRESS} \
                  --index-tx=${HSD_INDEX_TX} \
-                 --api-key=${HSD_API_KEY} \
+                 --api-key="${HSD_API_KEY}" \
                  --cors=${HSD_CORS} \
                  --coinbase-address=${COINBASE}
 else
@@ -139,7 +139,7 @@ else
                  --log-level=${LOGGING} \
                  --index-address=${HSD_INDEX_ADDRESS} \
                  --index-tx=${HSD_INDEX_TX} \
-                 --api-key=${HSD_API_KEY} \
+                 --api-key="${HSD_API_KEY}" \
                  --cors=${HSD_CORS} \
                  --spv
 fi
