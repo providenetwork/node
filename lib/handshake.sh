@@ -68,7 +68,17 @@ if [[ -z "$HSD_HTTP_HOST" ]]; then
 fi
 
 if [[ -z "$HSD_HTTP_PORT" ]]; then
-  HSD_HTTP_PORT=12039 # default to mainnet
+  if [ "${HSD_NETWORK}" == "mainnet" ]; then
+    HSD_HTTP_PORT=12037
+  elif [ "${HSD_NETWORK}" == "testnet" ]; then
+    HSD_HTTP_PORT=13037
+  elif [ "${HSD_NETWORK}" == "regtest" ]; then
+    HSD_HTTP_PORT=14037
+  elif [ "${HSD_NETWORK}" == "simtest" ]; then
+    HSD_HTTP_PORT=15037
+  else
+    HSD_HTTP_PORT=12037
+  fi
 fi
 
 if [[ -z "$HSD_CORS" ]]; then
