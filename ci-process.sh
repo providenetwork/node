@@ -72,9 +72,56 @@ echo '....[PRVD] Docker Build....'
 sudo docker build -t provide.network/node .
 echo '....[PRVD] Docker Tag....'
 sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.us-east-1.amazonaws.com/provide.network/node:latest"
-echo '....[PRVD] Docker Push....'
+echo '....[PRVD] Docker Push: Worldwide Distribution....'
+
 $(aws ecr get-login --no-include-email --region us-east-1)
 sudo docker push "085843810865.dkr.ecr.us-east-1.amazonaws.com/provide.network/node:latest"
+
+$(aws ecr get-login --no-include-email --region us-east-2)
+sudo docker push "085843810865.dkr.ecr.us-east-2.amazonaws.com/provide.network/node"
+
+$(aws ecr get-login --no-include-email --region us-west-1)
+sudo docker push "085843810865.dkr.ecr.us-west-1.amazonaws.com/provide.network/node"
+
+$(aws ecr get-login --no-include-email --region us-west-2)
+sudo docker push "085843810865.dkr.ecr.us-west-2.amazonaws.com/provide.network/node"
+
+$(aws ecr get-login --no-include-email --region ap-south-1)
+sudo docker push "085843810865.dkr.ecr.ap-south-1.amazonaws.com/provide.network/node"
+
+$(aws ecr get-login --no-include-email --region ap-northeast-1)
+sudo docker push "085843810865.dkr.ecr.ap-northeast-1.amazonaws.com/provide.network/node"
+
+$(aws ecr get-login --no-include-email --region ap-northeast-2)
+sudo docker push "085843810865.dkr.ecr.ap-northeast-2.amazonaws.com/provide.network/node"
+
+$(aws ecr get-login --no-include-email --region ap-southeast-1)
+sudo docker push "085843810865.dkr.ecr.ap-southeast-1.amazonaws.com/provide.network/node"
+
+$(aws ecr get-login --no-include-email --region ap-southeast-2)
+sudo docker push "085843810865.dkr.ecr.ap-southeast-2.amazonaws.com/provide.network/node"
+
+$(aws ecr get-login --no-include-email --region ca-central-1)
+sudo docker push "085843810865.dkr.ecr.ca-central-1.amazonaws.com/provide.network/node"
+
+$(aws ecr get-login --no-include-email --region eu-central-1)
+sudo docker push "085843810865.dkr.ecr.eu-central-1.amazonaws.com/provide.network/node"
+
+$(aws ecr get-login --no-include-email --region eu-west-1)
+sudo docker push "085843810865.dkr.ecr.eu-west-1.amazonaws.com/provide.network/node"
+
+$(aws ecr get-login --no-include-email --region eu-west-2)
+sudo docker push "085843810865.dkr.ecr.eu-west-2.amazonaws.com/provide.network/node"
+
+$(aws ecr get-login --no-include-email --region eu-west-3)
+sudo docker push "085843810865.dkr.ecr.eu-west-3.amazonaws.com/provide.network/node"
+
+$(aws ecr get-login --no-include-email --region eu-north-1)
+sudo docker push "085843810865.dkr.ecr.eu-north-1.amazonaws.com/provide.network/node"
+
+$(aws ecr get-login --no-include-email --region sa-east-1)
+sudo docker push "085843810865.dkr.ecr.sa-east-1.amazonaws.com/provide.network/node"
+
 
 # TODO: dispatch message to listeners watching for version updates
 
