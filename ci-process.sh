@@ -92,7 +92,7 @@ perform_deployment()
         ECR_IMAGE=$(aws ecr describe-images --repository-name "${AWS_ECR_REPOSITORY_NAME}" --image-ids imageDigest="${ECR_IMAGE_DIGEST}" | jq '.')
 
         echo '....load-aws-task-definition-template....'
-        ECS_TASK_DEFINITION=$(cat "${DEFINITION_FILE}" | jq '.taskDefinition | del(.taskDefinitionArn) | del(.revision) | del(.status) | del(.compatibilities) | del(.requiresAttributes)')
+        ECS_TASK_DEFINITION=$(cat "${DEFINITION_FILE}" | jq 'del(.taskDefinitionArn) | del(.revision) | del(.status) | del(.compatibilities) | del(.requiresAttributes)')
 
         echo '....file manipulation....'
         echo $ECS_TASK_DEFINITION > $DEFINITION_FILE
