@@ -67,7 +67,7 @@
           {
             "hostPort": 12038,
             "protocol": "tcp",
-            "containerPort": 30300
+            "containerPort": 12038
           },
           {
             "hostPort": 12039,
