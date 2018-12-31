@@ -84,6 +84,7 @@ perform_deployment()
         MUNGED_FILE="ecs-task-definition-${awsRegion}-UPDATED.json"
         MUNGED_FILE_TMP="ecs-task-definition-${awsRegion}.tmp.json"
 
+        export AWS_DEFAULT_REGION=$awsRegion
         $(aws ecr get-login --no-include-email --region ${awsRegion})
 
         echo '....list-images....'
