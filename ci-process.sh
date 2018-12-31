@@ -101,7 +101,6 @@ perform_deployment()
         sed -E "s/node:[a-zA-Z0-9\.-]+/node:${buildRef}/g" "./${DEFINITION_FILE}" > "./${MUNGED_FILE}"
         sed -E "s/\{\{awsAccountId\}\}/${AWS_ACCOUNT_ID}/g" "./${MUNGED_FILE}" > "./${MUNGED_FILE_TMP}"
         sed -E "s/\{\{awsRegion\}\}/${awsRegion}/g" "./${MUNGED_FILE_TMP}" > "./${MUNGED_FILE}"
-        cat $MUNGED_FILE
 
         echo '....register-task-definition....'
         ECS_TASK_DEFINITION_ID=$(aws ecs register-task-definition --family "${AWS_ECS_TASK_DEFINITION_FAMILY}" --cli-input-json "file://${MUNGED_FILE}" | jq '.taskDefinition.taskDefinitionArn' | sed -E 's/.*\/(.*)"$/\1/')
