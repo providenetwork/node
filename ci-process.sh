@@ -97,9 +97,9 @@ perform_deployment()
 
         echo '....file manipulation....'
         echo $ECS_TASK_DEFINITION > $DEFINITION_FILE
-        sed -E "s/node:[a-zA-Z0-9\.-]+/node:${buildRef}/" "./${DEFINITION_FILE}" > "./${MUNGED_FILE}"
-        sed -E "s/\{\{awsAccountId\}\}/${AWS_ACCOUNT_ID}/" "./${MUNGED_FILE}" > "./${MUNGED_FILE_TMP}"
-        sed -E "s/\{\{awsRegion\}\}/${awsRegion}/" "./${MUNGED_FILE_TMP}" > "./${MUNGED_FILE}"
+        sed -E "s/node:[a-zA-Z0-9\.-]+/node:${buildRef}/g" "./${DEFINITION_FILE}" > "./${MUNGED_FILE}"
+        sed -E "s/\{\{awsAccountId\}\}/${AWS_ACCOUNT_ID}/g" "./${MUNGED_FILE}" > "./${MUNGED_FILE_TMP}"
+        sed -E "s/\{\{awsRegion\}\}/${awsRegion}/g" "./${MUNGED_FILE_TMP}" > "./${MUNGED_FILE}"
         cat $MUNGED_FILE
 
         echo '....register-task-definition....'
