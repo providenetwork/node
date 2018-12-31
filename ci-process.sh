@@ -91,8 +91,8 @@ perform_deployment()
         echo '....describe-images....'
         ECR_IMAGE=$(aws ecr describe-images --repository-name "${AWS_ECR_REPOSITORY_NAME}" --image-ids imageDigest="${ECR_IMAGE_DIGEST}" | jq '.')
 
-        echo '....describe-task-definition....'
-        ECS_TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition "${AWS_ECS_TASK_DEFINITION_FAMILY}" | jq '.taskDefinition | del(.taskDefinitionArn) | del(.revision) | del(.status) | del(.compatibilities) | del(.requiresAttributes)')
+        echo '....load-aws-task-definition-template....'
+        ECS_TASK_DEFINITION=$(cat "${DEFINITION_FILE}" | jq '.taskDefinition | del(.taskDefinitionArn) | del(.revision) | del(.status) | del(.compatibilities) | del(.requiresAttributes)')
 
         echo '....file manipulation....'
         echo $ECS_TASK_DEFINITION > $DEFINITION_FILE
@@ -103,6 +103,7 @@ perform_deployment()
 
         sudo docker tag provide.network/node:latest "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:${buildRef}"
         sudo docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:${buildRef}"
+        sudo docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:latest"
     fi
 }
 
@@ -114,11 +115,10 @@ get_build_info
 echo '....[PRVD] Docker Build....'
 sudo docker build -t provide.network/node .
 
-# TODO: update provide.network/node repository image in all supported availability zones
 echo '....[PRVD] Docker Build....'
 sudo docker build -t provide.network/node .
 
-echo '....[PRVD] Worldwide Docker Distribution....'
+echo '....[PRVD] AWS Worldwide Docker Distribution....'
 
 perform_deployment "us-east-1"
 perform_deployment "us-east-2"
@@ -136,71 +136,6 @@ perform_deployment "eu-west-2"
 perform_deployment "eu-west-3"
 perform_deployment "eu-north-1"
 perform_deployment "sa-east-1"
-
-# $(aws ecr get-login --no-include-email --AWS_REGION us-east-1)
-# sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.us-east-1.amazonaws.com/provide.network/node:${buildRef}"
-# sudo docker push "085843810865.dkr.ecr.us-east-1.amazonaws.com/provide.network/node:${buildRef}"
-
-# $(aws ecr get-login --no-include-email --AWS_REGION us-east-2)
-# sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.us-east-2.amazonaws.com/provide.network/node:${buildRef}"
-# sudo docker push "085843810865.dkr.ecr.us-east-2.amazonaws.com/provide.network/node:${buildRef}"
-
-# $(aws ecr get-login --no-include-email --AWS_REGION us-west-1)
-# sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.us-west-1.amazonaws.com/provide.network/node:${buildRef}"
-# sudo docker push "085843810865.dkr.ecr.us-west-1.amazonaws.com/provide.network/node:${buildRef}"
-
-# $(aws ecr get-login --no-include-email --AWS_REGION us-west-2)
-# sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.us-west-2.amazonaws.com/provide.network/node:${buildRef}"
-# sudo docker push "085843810865.dkr.ecr.us-west-2.amazonaws.com/provide.network/node:${buildRef}"
-
-# $(aws ecr get-login --no-include-email --AWS_REGION ap-south-1)
-# sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.ap-south-1.amazonaws.com/provide.network/node:${buildRef}"
-# sudo docker push "085843810865.dkr.ecr.ap-south-1.amazonaws.com/provide.network/node:${buildRef}"
-
-# $(aws ecr get-login --no-include-email --AWS_REGION ap-northeast-1)
-# sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.ap-northeast-1.amazonaws.com/provide.network/node:${buildRef}"
-# sudo docker push "085843810865.dkr.ecr.ap-northeast-1.amazonaws.com/provide.network/node:${buildRef}"
-
-# $(aws ecr get-login --no-include-email --AWS_REGION ap-northeast-2)
-# sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.ap-northeast-2.amazonaws.com/provide.network/node:${buildRef}"
-# sudo docker push "085843810865.dkr.ecr.ap-northeast-2.amazonaws.com/provide.network/node:${buildRef}"
-
-# $(aws ecr get-login --no-include-email --AWS_REGION ap-southeast-1)
-# sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.ap-southeast-1.amazonaws.com/provide.network/node:${buildRef}"
-# sudo docker push "085843810865.dkr.ecr.ap-southeast-1.amazonaws.com/provide.network/node:${buildRef}"
-
-# $(aws ecr get-login --no-include-email --AWS_REGION ap-southeast-2)
-# sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.ap-southeast-2.amazonaws.com/provide.network/node:${buildRef}"
-# sudo docker push "085843810865.dkr.ecr.ap-southeast-2.amazonaws.com/provide.network/node:${buildRef}"
-
-# $(aws ecr get-login --no-include-email --AWS_REGION ca-central-1)
-# sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.ca-central-1.amazonaws.com/provide.network/node:${buildRef}"
-# sudo docker push "085843810865.dkr.ecr.ca-central-1.amazonaws.com/provide.network/node:${buildRef}"
-
-# $(aws ecr get-login --no-include-email --AWS_REGION eu-central-1)
-# sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.eu-central-1.amazonaws.com/provide.network/node:${buildRef}"
-# sudo docker push "085843810865.dkr.ecr.eu-central-1.amazonaws.com/provide.network/node:${buildRef}"
-
-# $(aws ecr get-login --no-include-email --AWS_REGION eu-west-1)
-# sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.eu-west-1.amazonaws.com/provide.network/node:${buildRef}"
-# sudo docker push "085843810865.dkr.ecr.eu-west-1.amazonaws.com/provide.network/node:${buildRef}"
-
-# $(aws ecr get-login --no-include-email --AWS_REGION eu-west-2)
-# sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.eu-west-2.amazonaws.com/provide.network/node:${buildRef}"
-# sudo docker push "085843810865.dkr.ecr.eu-west-2.amazonaws.com/provide.network/node:${buildRef}"
-
-# $(aws ecr get-login --no-include-email --AWS_REGION eu-west-3)
-# sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.eu-west-3.amazonaws.com/provide.network/node:${buildRef}"
-# sudo docker push "085843810865.dkr.ecr.eu-west-3.amazonaws.com/provide.network/node:${buildRef}"
-
-# $(aws ecr get-login --no-include-email --AWS_REGION eu-north-1)
-# sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.eu-north-1.amazonaws.com/provide.network/node:${buildRef}"
-# sudo docker push "085843810865.dkr.ecr.eu-north-1.amazonaws.com/provide.network/node:${buildRef}"
-
-# $(aws ecr get-login --no-include-email --AWS_REGION sa-east-1)
-# sudo docker tag provide.network/node:latest "085843810865.dkr.ecr.sa-east-1.amazonaws.com/provide.network/node:${buildRef}"
-# sudo docker push "085843810865.dkr.ecr.sa-east-1.amazonaws.com/provide.network/node:${buildRef}"
-
 
 # TODO: dispatch message to listeners watching for version updates
 
