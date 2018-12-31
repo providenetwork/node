@@ -80,7 +80,7 @@ perform_deployment()
     then
         echo '....[PRVD] Skipping container deployment....'
     else
-        DEFINITION_FILE="ecs-task-definition-${awsRegion}.json"
+        DEFINITION_FILE="ecs-task-definition.json"
         MUNGED_FILE="ecs-task-definition-${awsRegion}-UPDATED.json"
 
         $(aws ecr get-login --no-include-email --region ${awsRegion})
