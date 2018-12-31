@@ -1,5 +1,5 @@
 {
-    "executionRoleArn": "arn:aws:iam::085843810865:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::{{awsAccountId}}:role/ecsTaskExecutionRole",
     "containerDefinitions": [
       {
         "logConfiguration": {
@@ -174,13 +174,13 @@
         "memory": 4096,
         "memoryReservation": 2048,
         "volumesFrom": [],
-        "image": "085843810865.dkr.ecr.us-east-1.amazonaws.com/provide.network/node:latest",
+        "image": "{{awsAccountId}}.dkr.ecr.{{awsRegion}}.amazonaws.com/provide.network/node:latest",
         "name": "node"
       }
     ],
     "placementConstraints": [],
     "memory": "4096",
-    "taskRoleArn": "arn:aws:iam::085843810865:role/ecsTaskExecutionRole",
+    "taskRoleArn": "arn:aws:iam::{{awsAccountId}}:role/ecsTaskExecutionRole",
     "compatibilities": [
       "EC2",
       "FARGATE"
