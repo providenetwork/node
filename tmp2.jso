@@ -1,0 +1,258 @@
+{
+    "executionRoleArn": "arn:aws:iam::000033333:role/ecsTaskExecutionRole",
+    "containerDefinitions": [
+      {
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+            "awslogs-group": "/ecs/providenetwork-node",
+            "awslogs-region": "us-east-1",
+            "awslogs-stream-prefix": "ecs"
+          }
+        },
+        "entryPoint": [
+          "./main.sh"
+        ],
+        "portMappings": [
+          {
+            "hostPort": 53,
+            "protocol": "udp",
+            "containerPort": 53
+          },
+          {
+            "hostPort": 4000,
+            "protocol": "tcp",
+            "containerPort": 4000
+          },
+          {
+            "hostPort": 5001,
+            "protocol": "tcp",
+            "containerPort": 5001
+          },
+          {
+            "hostPort": 5300,
+            "protocol": "tcp",
+            "containerPort": 5300
+          },
+          {
+            "hostPort": 8050,
+            "protocol": "tcp",
+            "containerPort": 8050
+          },
+          {
+            "hostPort": 8051,
+            "protocol": "tcp",
+            "containerPort": 8051
+          },
+          {
+            "hostPort": 8080,
+            "protocol": "tcp",
+            "containerPort": 8080
+          },
+          {
+            "hostPort": 8332,
+            "protocol": "tcp",
+            "containerPort": 8332
+          },
+          {
+            "hostPort": 9001,
+            "protocol": "tcp",
+            "containerPort": 9001
+          },
+          {
+            "hostPort": 12037,
+            "protocol": "tcp",
+            "containerPort": 12037
+          },
+          {
+            "hostPort": 12038,
+            "protocol": "tcp",
+            "containerPort": 12038
+          },
+          {
+            "hostPort": 12039,
+            "protocol": "tcp",
+            "containerPort": 12039
+          },
+          {
+            "hostPort": 13037,
+            "protocol": "tcp",
+            "containerPort": 13037
+          },
+          {
+            "hostPort": 13038,
+            "protocol": "tcp",
+            "containerPort": 13038
+          },
+          {
+            "hostPort": 13039,
+            "protocol": "tcp",
+            "containerPort": 13039
+          },
+          {
+            "hostPort": 14037,
+            "protocol": "tcp",
+            "containerPort": 14037
+          },
+          {
+            "hostPort": 14038,
+            "protocol": "tcp",
+            "containerPort": 14038
+          },
+          {
+            "hostPort": 14039,
+            "protocol": "tcp",
+            "containerPort": 14039
+          },
+          {
+            "hostPort": 15037,
+            "protocol": "tcp",
+            "containerPort": 15037
+          },
+          {
+            "hostPort": 15038,
+            "protocol": "tcp",
+            "containerPort": 15038
+          },
+          {
+            "hostPort": 15039,
+            "protocol": "tcp",
+            "containerPort": 15039
+          },
+          {
+            "hostPort": 15349,
+            "protocol": "tcp",
+            "containerPort": 15349
+          },
+          {
+            "hostPort": 15350,
+            "protocol": "tcp",
+            "containerPort": 15350
+          },
+          {
+            "hostPort": 15359,
+            "protocol": "tcp",
+            "containerPort": 15359
+          },
+          {
+            "hostPort": 15360,
+            "protocol": "tcp",
+            "containerPort": 15360
+          },
+          {
+            "hostPort": 18332,
+            "protocol": "tcp",
+            "containerPort": 18332
+          },
+          {
+            "hostPort": 18556,
+            "protocol": "tcp",
+            "containerPort": 18556
+          },
+          {
+            "hostPort": 30300,
+            "protocol": "tcp",
+            "containerPort": 30300
+          },
+          {
+            "hostPort": 30300,
+            "protocol": "udp",
+            "containerPort": 30300
+          }
+        ],
+        "cpu": 2048,
+        "environment": [],
+        "ulimits": [
+          {
+            "name": "nofile",
+            "softLimit": 65000,
+            "hardLimit": 65000
+          }
+        ],
+        "mountPoints": [],
+        "workingDirectory": "/opt",
+        "memory": 4096,
+        "memoryReservation": 2048,
+        "volumesFrom": [],
+        "image": "000033333.dkr.ecr.us-east-33.amazonaws.com/provide.network/node:daaaabeaarrrrsssss",
+        "name": "node"
+      }
+    ],
+    "placementConstraints": [],
+    "memory": "4096",
+    "taskRoleArn": "arn:aws:iam::000033333:role/ecsTaskExecutionRole",
+    "compatibilities": [
+      "EC2",
+      "FARGATE"
+    ],
+    "family": "providenetwork-node",
+    "requiresAttributes": [
+      {
+        "targetId": null,
+        "targetType": null,
+        "value": null,
+        "name": "com.amazonaws.ecs.capability.docker-remote-api.1.17"
+      },
+      {
+        "targetId": null,
+        "targetType": null,
+        "value": null,
+        "name": "ecs.capability.execution-role-ecr-pull"
+      },
+      {
+        "targetId": null,
+        "targetType": null,
+        "value": null,
+        "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+      },
+      {
+        "targetId": null,
+        "targetType": null,
+        "value": null,
+        "name": "ecs.capability.task-eni"
+      },
+      {
+        "targetId": null,
+        "targetType": null,
+        "value": null,
+        "name": "com.amazonaws.ecs.capability.ecr-auth"
+      },
+      {
+        "targetId": null,
+        "targetType": null,
+        "value": null,
+        "name": "com.amazonaws.ecs.capability.task-iam-role"
+      },
+      {
+        "targetId": null,
+        "targetType": null,
+        "value": null,
+        "name": "ecs.capability.execution-role-awslogs"
+      },
+      {
+        "targetId": null,
+        "targetType": null,
+        "value": null,
+        "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+      },
+      {
+        "targetId": null,
+        "targetType": null,
+        "value": null,
+        "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+      },
+      {
+        "targetId": null,
+        "targetType": null,
+        "value": null,
+        "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+      }
+    ],
+    "requiresCompatibilities": [
+      "FARGATE"
+    ],
+    "networkMode": "awsvpc",
+    "cpu": "2048",
+    "volumes": []
+  }
+  
