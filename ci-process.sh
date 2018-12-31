@@ -82,7 +82,7 @@ perform_deployment()
     else
         DEFINITION_FILE="ecs-task-definition.json"
         MUNGED_FILE="ecs-task-definition-${awsRegion}-UPDATED.json"
-        MUNGED_FILE_TMP="ecs-task-definition-${awsRegion}-UPDATED.json"
+        MUNGED_FILE_TMP="ecs-task-definition-${awsRegion}.tmp.json"
 
         $(aws ecr get-login --no-include-email --region ${awsRegion})
 
