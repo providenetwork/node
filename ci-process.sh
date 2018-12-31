@@ -97,6 +97,7 @@ perform_deployment()
         echo '....file manipulation....'
         echo $ECS_TASK_DEFINITION > $DEFINITION_FILE
         sed -E "s/node:[a-zA-Z0-9\.-]+/node:${buildRef}/" "./${DEFINITION_FILE}" | sed -E "s/\{\{awsAccountId\}\}/${AWS_ACCOUNT_ID}/" | sed -E "s/\{\{awsRegion\}\}/${awsRegion}/" > "./${MUNGED_FILE}"
+        cat $MUNGED_FILE
 
         echo '....register-task-definition....'
         ECS_TASK_DEFINITION_ID=$(aws ecs register-task-definition --family "${AWS_ECS_TASK_DEFINITION_FAMILY}" --cli-input-json "file://${MUNGED_FILE}" | jq '.taskDefinitionArn' | sed -E 's/.*\/(.*)"$/\1/')
