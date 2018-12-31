@@ -82,6 +82,7 @@ perform_deployment()
     else
         DEFINITION_FILE="ecs-task-definition.json"
         MUNGED_FILE="ecs-task-definition-${awsRegion}-UPDATED.json"
+        MUNGED_FILE_TMP="ecs-task-definition-${awsRegion}-UPDATED.json"
 
         $(aws ecr get-login --no-include-email --region ${awsRegion})
 
@@ -96,7 +97,9 @@ perform_deployment()
 
         echo '....file manipulation....'
         echo $ECS_TASK_DEFINITION > $DEFINITION_FILE
-        sed -E "s/node:[a-zA-Z0-9\.-]+/node:${buildRef}/" "./${DEFINITION_FILE}" | sed -E "s/\{\{awsAccountId\}\}/${AWS_ACCOUNT_ID}/" | sed -E "s/\{\{awsRegion\}\}/${awsRegion}/" > "./${MUNGED_FILE}"
+        sed -E "s/node:[a-zA-Z0-9\.-]+/node:${buildRef}/" "./${DEFINITION_FILE}" > "./${MUNGED_FILE}"
+        sed -E "s/\{\{awsAccountId\}\}/${AWS_ACCOUNT_ID}/" "./${MUNGED_FILE}" > "./${MUNGED_FILE_TMP}"
+        sed -E "s/\{\{awsRegion\}\}/${awsRegion}/" "./${MUNGED_FILE_TMP}" > "./${MUNGED_FILE}"
         cat $MUNGED_FILE
 
         echo '....register-task-definition....'
