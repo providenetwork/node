@@ -118,10 +118,7 @@ setup_deployment_tools
 get_build_info
 
 echo '....[PRVD] Docker Build....'
-sudo docker build -t provide.network/node .
-
-echo '....[PRVD] Docker Build....'
-sudo docker build -t provide.network/node .
+sudo docker build -t "${AWS_ECR_REPOSITORY_NAME}"" .
 
 echo '....[PRVD] AWS Worldwide Docker Distribution....'
 
