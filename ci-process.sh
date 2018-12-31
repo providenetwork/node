@@ -80,8 +80,8 @@ perform_deployment()
     then
         echo '....[PRVD] Skipping container deployment....'
     else
-        DEFINITION_FILE=ecs-task-definition.json
-        MUNGED_FILE=ecs-task-definition-UPDATED.json
+        DEFINITION_FILE="ecs-task-definition-${awsRegion}.json"
+        MUNGED_FILE="ecs-task-definition-${awsRegion}-UPDATED.json"
 
         $(aws ecr get-login --no-include-email --region ${awsRegion})
 
@@ -97,9 +97,10 @@ perform_deployment()
         echo '....file manipulation....'
         echo $ECS_TASK_DEFINITION > $DEFINITION_FILE
         sed -E "s/node:[a-zA-Z0-9\.-]+/node:${buildRef}/" "./${DEFINITION_FILE}" > "./${MUNGED_FILE}"
+        cat $MUNGED_FILE
 
         echo '....register-task-definition....'
-        ECS_TASK_DEFINITION_ID=$(aws ecs register-task-definition --family "${AWS_ECS_TASK_DEFINITION_FAMILY}" --cli-input-json "file://${MUNGED_FILE}" | jq '.taskDefinition.taskDefinitionArn' | sed -E 's/.*\/(.*)"$/\1/')
+        ECS_TASK_DEFINITION_ID=$(aws ecs register-task-definition --family "${AWS_ECS_TASK_DEFINITION_FAMILY}" --cli-input-json "file://${MUNGED_FILE}" | jq '.taskDefinitionArn' | sed -E 's/.*\/(.*)"$/\1/')
 
         sudo docker tag provide.network/node:latest "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:${buildRef}"
         sudo docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:${buildRef}"

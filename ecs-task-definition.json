@@ -185,7 +185,6 @@
       "EC2",
       "FARGATE"
     ],
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:085843810865:task-definition/providenetwork-node:3",
     "family": "providenetwork-node",
     "requiresAttributes": [
       {
@@ -254,8 +253,6 @@
     ],
     "networkMode": "awsvpc",
     "cpu": "2048",
-    "revision": 3,
-    "status": "ACTIVE",
     "volumes": []
   }
   
