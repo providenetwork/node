@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+echo "Starting client: "${CLIENT}
 
 if [[ -z "${CLIENT}" ]]; then
   CLIENT=quorum
@@ -27,4 +28,6 @@ elif [ "$CLIENT" = "handshake" ]; then
   source ./handshake.sh
 elif [ "$CLIENT" = "quorum" ]; then
   source ./quorum.sh
+elif [ "$CLIENT" = "burrow" ]; then
+  source ./burrow.sh
 fi
