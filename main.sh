@@ -26,8 +26,8 @@ elif [ "$CLIENT" = "ewasm-cpp-eth" ]; then
   source ./ewasm-cpp-eth.sh
 elif [ "$CLIENT" = "handshake" ]; then
   source ./handshake.sh
+elif [ "$CLIENT" = "hyperledger" ]; then
+  source ./hyperledger.sh
 elif [ "$CLIENT" = "quorum" ]; then
   source ./quorum.sh
-elif [ "$CLIENT" = "burrow" ]; then
-  source ./burrow.sh
 fi
