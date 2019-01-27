@@ -22,6 +22,6 @@ if [ "${IMPL}" == "burrow" ]; then
     echo "provide.network hyperledger burrow node starting in ${PWD}; burrow bin: ${BURROW_BIN}"
     ${BURROW_BIN} start --validator-index=0
   fi
-elif [ "${PRIVACY_IMPL}" == "fabric" ]; then
+elif [ "${IMPL}" == "fabric" ]; then
   echo "WARNING: provide.network hyperledger fabric node cannot starting in ${PWD}; fabric not yet implemented"
 fi
