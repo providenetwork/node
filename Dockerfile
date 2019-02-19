@@ -58,8 +58,8 @@ RUN /bin/bash -c 'curl https://github.com/jpmorganchase/tessera/releases/downloa
 # remarshal installation
 RUN /bin/bash -c 'git clone https://github.com/dbohdan/remarshal.git && pushd remarshal && python setup.py install && popd'
 
-#Burrow installation
-RUN /bin/bash -c 'go get github.com/hyperledger/burrow && cd $GOPATH/src/github.com/hyperledger/burrow && make build'
+# burrow installation
+# RUN /bin/bash -c 'go get github.com/hyperledger/burrow && cd $GOPATH/src/github.com/hyperledger/burrow && make build'
 
 EXPOSE 53
 EXPOSE 4000
