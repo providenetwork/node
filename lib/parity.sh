@@ -119,9 +119,10 @@ if [[ -z "${IPFS_API_HOSTS}" ]]; then
   IPFS_API_HOSTS=all
 fi
 
-if [[ -z "${TX_QUEUE_PERSISTENT}" ]]; then
-  TX_QUEUE_PERSISTENT=false
-fi
+# if [[ -z "${TX_QUEUE_PERSISTENT}" ]]; then
+#   TX_QUEUE_PERSISTENT=false
+# fi
+# --no-persistent-txqueue ${TX_QUEUE_PERSISTENT} \
 
 if [[ -z "${TX_QUEUE_PER_SENDER}" ]]; then
   TX_QUEUE_PER_SENDER=2048
@@ -200,7 +201,6 @@ then
               --force-sealing \
               --reseal-on-txs $RESEAL_ON_TXS \
               --reseal-max-period $RESEAL_MAX_PERIOD \
-              --no-persistent-txqueue ${TX_QUEUE_PERSISTENT} \
               --tx-queue-per-sender ${TX_QUEUE_PER_SENDER} \
               --tx-queue-no-early-exit \
               --fat-db $FAT_DB \
