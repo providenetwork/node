@@ -28,6 +28,12 @@ if [[ -z "${BOOTNODES}" ]]; then
     fi
     curl -L "${BOOTNODES_URL}" > bootnodes.txt 2> /dev/null
     BOOTNODES=$(cat bootnodes.txt)
+    case $BOOTNODES in  
+      *\ * )
+        echo "Found invalid characters in bootnodes.txt"
+        BOOTNODES=
+        ;;
+    esac
   fi
 fi
 
@@ -202,7 +208,6 @@ then
               --reseal-on-txs $RESEAL_ON_TXS \
               --reseal-max-period $RESEAL_MAX_PERIOD \
               --tx-queue-per-sender ${TX_QUEUE_PER_SENDER} \
-              --tx-queue-no-early-exit \
               --fat-db $FAT_DB \
               --pruning $PRUNING \
               --tracing $TRACING \
