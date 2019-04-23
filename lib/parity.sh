@@ -53,10 +53,6 @@ if [[ -z "${AUTO_UPDATE}" ]]; then
   AUTO_UPDATE=all
 fi
 
-if [[ -z "${PRUNING}" ]]; then
-  PRUNING=auto
-fi
-
 if [[ -z "${RESEAL_ON_TXS}" ]]; then
   RESEAL_ON_TXS=all
 fi
@@ -66,15 +62,15 @@ if [[ -z "${RESEAL_MAX_PERIOD}" ]]; then
 fi
 
 if [[ -z "${FAT_DB}" ]]; then
-  FAT_DB=auto
+  FAT_DB=on
 fi
 
 if [[ -z "${PRUNING}" ]]; then
-  PRUNING=auto
+  PRUNING=archive
 fi
 
 if [[ -z "${TRACING}" ]]; then
-  TRACING=auto
+  TRACING=on
 fi
 
 if [[ -z "${PORT}" ]]; then
