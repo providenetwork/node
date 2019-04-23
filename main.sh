@@ -22,6 +22,8 @@ elif [ "$CLIENT" = "geth" ]; then
   source ./geth.sh
 elif [ "$CLIENT" = "parity" ]; then
   source ./parity.sh
+elif [ "$CLIENT" = "parity-aura-pos" ]; then
+  source ./parity-aura-pos.sh
 elif [ "$CLIENT" = "ewasm-cpp-eth" ]; then
   source ./ewasm-cpp-eth.sh
 elif [ "$CLIENT" = "handshake" ]; then

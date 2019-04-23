@@ -5,7 +5,7 @@ WORKDIR /opt
 
 RUN apt-get update -qq && apt-get upgrade -y && apt-get install -y sudo unattended-upgrades curl wget
 RUN wget -qO- https://deb.nodesource.com/setup_11.x | sudo -E bash -
-RUN apt-get install -y build-essential automake default-jre libcap2-bin libtool libsodium-dev python3-pip python-setuptools unbound dnsutils libunbound-dev nodejs
+RUN apt-get install -y build-essential automake default-jre libcap2-bin libtool libsodium-dev python3-pip python-setuptools unbound dnsutils libunbound-dev nodejs yasm libudev-dev
 RUN ln -s $(which nodejs) /usr/local/bin/node
 RUN echo -e "APT::Periodic::Update-Package-Lists \"1\";\nAPT::Periodic::Unattended-Upgrade \"1\";\n" > /etc/apt/apt.conf.d/20auto-upgrades
 
@@ -43,6 +43,10 @@ RUN /bin/bash -c 'tar xvvf go-ipfs_v0.4.17_linux-amd64.tar.gz && pushd go-ipfs &
 
 # Parity installation
 RUN /bin/bash -c 'bash <(curl https://get.parity.io -L)'
+
+# Parity AuRa-POS fork
+RUN /bin/bash -c 'curl https://sh.rustup.rs -sSf > ./rustup.sh && chmod +x ./rustup.sh && ./rustup.sh -y && source $HOME/.cargo/env'
+RUN /bin/bash -c 'git clone https://github.com/poanetwork/parity-ethereum.git && pushd parity-ethereum && git checkout aura-pos && $HOME/.cargo/bin/cargo build --release --features final && cp ./target/release/parity /usr/local/bin/parity-aura-pos && popd'
 
 # Quorum installation
 RUN /bin/bash -c 'git clone https://github.com/jpmorganchase/quorum.git && pushd quorum && make all && popd'
