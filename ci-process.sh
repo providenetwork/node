@@ -87,27 +87,10 @@ perform_deployment()
         export AWS_DEFAULT_REGION=$awsRegion
         $(aws ecr get-login --no-include-email --region ${awsRegion})
 
-        echo '....list-images....'
-        ECR_IMAGE_DIGEST=$(aws ecr list-images --repository-name ${AWS_ECR_REPOSITORY_NAME} | jq '.imageIds[0].imageDigest')
+        echo '....create-repository....'
+        aws ecr create-repository --repository-name ${AWS_ECR_REPOSITORY_NAME} || true
 
-        echo '....describe-images....'
-        ECR_IMAGE=$(aws ecr describe-images --repository-name "${AWS_ECR_REPOSITORY_NAME}" --image-ids imageDigest="${ECR_IMAGE_DIGEST}" | jq '.')
-
-        echo '....load-aws-task-definition-template....'
-        ECS_TASK_DEFINITION=$(cat "${DEFINITION_FILE}" | jq 'del(.taskDefinitionArn) | del(.revision) | del(.status) | del(.compatibilities) | del(.requiresAttributes)')
-
-        echo '....file manipulation....'
-        echo $ECS_TASK_DEFINITION > $DEFINITION_FILE
-        sed -E "s/node:[a-zA-Z0-9\.-]+/node:${buildRef}/g" "./${DEFINITION_FILE}" > "./${MUNGED_FILE}"
-        sed -E "s/\{\{awsAccountId\}\}/${AWS_ACCOUNT_ID}/g" "./${MUNGED_FILE}" > "./${MUNGED_FILE_TMP}"
-        sed -E "s/\{\{awsRegion\}\}/${awsRegion}/g" "./${MUNGED_FILE_TMP}" > "./${MUNGED_FILE}"
-
-        echo '....register-task-definition....'
-        ECS_TASK_DEFINITION_ID=$(aws ecs register-task-definition --family "${AWS_ECS_TASK_DEFINITION_FAMILY}" --cli-input-json "file://${MUNGED_FILE}" | jq '.taskDefinition.taskDefinitionArn' | sed -E 's/.*\/(.*)"$/\1/')
-        echo "${ECS_TASK_DEFINITION_ID}"
-
-        sudo docker tag provide.network/node:latest "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:${buildRef}"
-        sudo docker tag provide.network/node:latest "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:latest"
+        sudo docker tag ${AWS_ECR_REPOSITORY_NAME}:latest "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:${buildRef}"
         sudo docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:${buildRef}"
         sudo docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:latest"
     fi
