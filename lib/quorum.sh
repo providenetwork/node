@@ -169,7 +169,7 @@ then
 
     $QUORUM_BIN --config $CHAIN_SPEC \
                 --datadir "${BASE_PATH}" \
-                --networkid "${CHAIN}" \
+                --networkid "${NETWORK_ID}" \
                 --bootnodes "${BOOTNODES}" \
                 --trace "${LOG_PATH}" \
                 --port $PORT \
@@ -194,7 +194,7 @@ then
   elif [ "${CONSENSYS}" == "raft" ]; then
     $QUORUM_BIN --config $CHAIN_SPEC \
                 --datadir "${BASE_PATH}" \
-                --networkid "${CHAIN}" \
+                --networkid "${NETWORK_ID}" \
                 --bootnodes "${BOOTNODES}" \
                 --trace "${LOG_PATH}" \
                 --port $PORT \
