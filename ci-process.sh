@@ -87,6 +87,7 @@ perform_deployment()
         aws ecr create-repository --repository-name ${AWS_ECR_REPOSITORY_NAME} || true
 
         sudo docker tag ${AWS_ECR_REPOSITORY_NAME}:latest "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:${buildRef}"
+        sudo docker tag ${AWS_ECR_REPOSITORY_NAME}:latest "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:latest"
         sudo docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:${buildRef}"
         sudo docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:latest"
     fi
