@@ -65,6 +65,9 @@ RUN /bin/bash -c 'git clone https://github.com/dbohdan/remarshal.git && pushd re
 # burrow installation
 # RUN /bin/bash -c 'go get github.com/hyperledger/burrow && cd $GOPATH/src/github.com/hyperledger/burrow && make build'
 
+# libra installation
+RUN /bin/bash -c 'git clone https://github.com/libra/libra.git && pushd libra && ./scripts/dev_setup.sh && ./scripts/cli/start_cli_testnet.sh && popd'
+
 EXPOSE 53
 EXPOSE 4000
 EXPOSE 5001
