@@ -30,6 +30,8 @@ elif [ "$CLIENT" = "handshake" ]; then
   source ./handshake.sh
 elif [ "$CLIENT" = "hyperledger" ]; then
   source ./hyperledger.sh
+elif [ "$CLIENT" = "libra" ]; then
+  source ./libra.sh
 elif [ "$CLIENT" = "quorum" ]; then
   source ./quorum.sh
 fi
