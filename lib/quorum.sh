@@ -94,6 +94,10 @@ if [[ -z "${PORT}" ]]; then
   PORT=30300
 fi
 
+if [[ -z "${JSON_RPC_INTERFACE}" ]]; then
+  JSON_RPC_INTERFACE=0.0.0.0
+fi
+
 if [[ -z "${JSON_RPC_PORT}" ]]; then
   JSON_RPC_PORT=8050
 fi
