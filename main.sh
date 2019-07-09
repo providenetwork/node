@@ -3,8 +3,8 @@ echo "Starting client: "${CLIENT}
 
 if [[ -z "${CLIENT}" ]]; then
   CLIENT=quorum
-  if [[ -z "${CONSENSYS}" ]]; then
-    CONSENSYS=instanbul
+  if [[ -z "${CONSENSUS}" ]]; then
+    CONSENSUS=instanbul
   fi
 fi
 

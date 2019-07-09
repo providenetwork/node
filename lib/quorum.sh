@@ -10,8 +10,8 @@ if [[ -z "${CHAIN}" ]]; then
   CHAIN=mainnet
 fi
 
-if [[ -z "${CONSENSYS}" ]]; then
-  CONSENSYS=istanbul
+if [[ -z "${CONSENSUS}" ]]; then
+  CONSENSUS=istanbul
 fi
 
 if [[ -z "${PRIVACY_IMPL}" ]]; then
@@ -103,7 +103,7 @@ if [[ -z "${JSON_RPC_CORS}" ]]; then
 fi
 
 if [[ -z "${WS_APIS}" ]]; then
-  WS_APIS="web3,eth,pubsub,net,parity,parity_pubsub,traces,rpc,shh,shh_pubsub,quorum,${CONSENSYS}"
+  WS_APIS="web3,eth,pubsub,net,parity,parity_pubsub,traces,rpc,shh,shh_pubsub,quorum,${CONSENSUS}"
 fi
 
 if [[ -z "${WS_PORT}" ]]; then
@@ -119,7 +119,7 @@ if [[ -z "${WS_ORIGINS}" ]]; then
 fi
 
 if [[ -z "${JSON_RPC_APIS}" ]]; then
-  JSON_RPC_APIS="db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,${CONSENSYS}"
+  JSON_RPC_APIS="db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,${CONSENSUS}"
 fi
 
 if [[ -z "${ENGINE_SIGNER}" ]]; then
@@ -160,11 +160,11 @@ fi
 QUORUM_BIN=$(which quorum-geth)
 if [ $? -eq 0 ]
 then
-  echo "provide.network quorum node starting in ${BASE_PATH}; consensys: ${CONSENSYS}; quorum bin: ${QUORUM_BIN}"
+  echo "provide.network quorum node starting in ${BASE_PATH}; CONSENSUS: ${CONSENSUS}; quorum bin: ${QUORUM_BIN}"
 
-  if [ "${CONSENSYS}" == "istanbul" ]; then
+  if [ "${CONSENSUS}" == "istanbul" ]; then
     if [[ -z "${BLOCKTIME}" ]]; then
-      BLOCKTIME=5
+      BLOCKTIME=5F
     fi
 
     $QUORUM_BIN --config $CHAIN_SPEC \
@@ -191,7 +191,7 @@ then
                 --vmdebug \
                 --istanbul.blockperiod ${BLOCKTIME} \
                 --emitcheckpoints
-  elif [ "${CONSENSYS}" == "raft" ]; then
+  elif [ "${CONSENSUS}" == "raft" ]; then
     $QUORUM_BIN --config $CHAIN_SPEC \
                 --datadir "${BASE_PATH}" \
                 --networkid "${NETWORK_ID}" \
