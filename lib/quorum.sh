@@ -190,7 +190,7 @@ then
                 --password "${ENGINE_SIGNER_KEY_PATH}" \
                 --etherbase $COINBASE \
                 --identity "${IDENTITY}" \
-                --syncmode "${SYNCMODE}" \
+                --syncmode "${SYNC_MODE}" \
                 --debug \
                 --vmdebug \
                 --istanbul.blockperiod ${BLOCKTIME} \
@@ -215,7 +215,7 @@ then
                 --password "${ENGINE_SIGNER_KEY_PATH}" \
                 --etherbase $COINBASE \
                 --identity "${IDENTITY}" \
-                --syncmode "${SYNCMODE}" \
+                --syncmode "${SYNC_MODE}" \
                 --debug \
                 --vmdebug \
                 --raft \
