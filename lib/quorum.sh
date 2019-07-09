@@ -164,7 +164,7 @@ then
 
   if [ "${CONSENSUS}" == "istanbul" ]; then
     if [[ -z "${BLOCKTIME}" ]]; then
-      BLOCKTIME=5F
+      BLOCKTIME=5
     fi
 
     $QUORUM_BIN --config $CHAIN_SPEC \
