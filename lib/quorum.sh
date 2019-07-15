@@ -29,7 +29,7 @@ if [ "${PRIVACY_IMPL}" == "constellation" ]; then
     fi
 
     if [[ -z "${CONSTELLATION_CONFIG_URL}" ]]; then
-      CONSTELLATION_CONFIG_URL="https://raw.githubusercontent.com/providenetwork/chain-spec/${CHAIN}/constellation.conf"
+      CONSTELLATION_CONFIG_URL="https://raw.githubusercontent.com/providenetwork/node/dev/genesis/defaults/evm/quorum/constellation.conf"
     fi
     curl -L "${CONSTELLATION_CONFIG_URL}" > "${CONSTELLATION_CONFIG}" 2> /dev/nul
 
@@ -51,7 +51,7 @@ elif [ "${PRIVACY_IMPL}" == "tessera" ]; then
     fi
 
     if [[ -z "${TESSERA_CONFIG_URL}" ]]; then
-      TESSERA_CONFIG_URL="https://raw.githubusercontent.com/providenetwork/chain-spec/${CHAIN}/tessera.json"
+      TESSERA_CONFIG_URL="https://raw.githubusercontent.com/providenetwork/node/dev/genesis/defaults/evm/quorum/tessera.json"
     fi
     curl -L "${TESSERA_CONFIG_URL}" > "${TESSERA_CONFIG}" 2> /dev/nul
 
@@ -69,7 +69,7 @@ fi
 
 if [ ! -f "${CHAIN_SPEC}" ] || [ ! -s "${CHAIN_SPEC}" ]; then
   if [[ -z "${CHAIN_SPEC_URL}" ]]; then
-    CHAIN_SPEC_URL="https://raw.githubusercontent.com/providenetwork/chain-spec/${CHAIN}/spec.json"
+    CHAIN_SPEC_URL="https://raw.githubusercontent.com/providenetwork/node/dev/genesis/defaults/evm/quorum/spec.json"
   fi
   curl -L "${CHAIN_SPEC_URL}" > "${CHAIN_SPEC}" 2> /dev/null
   json2toml -o "${CHAIN_SPEC}" "${CHAIN_SPEC}" 2> /dev/null
@@ -79,7 +79,7 @@ fi
 if [[ -z "${BOOTNODES}" ]]; then
   if [ ! -f bootnodes.txt ] || [ ! -s bootnodes.txt ]; then
     if [[ -z "${BOOTNODES_URL}" ]]; then
-      BOOTNODES_URL="https://raw.githubusercontent.com/providenetwork/chain-spec/${CHAIN}/bootnodes.txt"
+      BOOTNODES_URL="https://raw.githubusercontent.com/providenetwork/node/dev/genesis/defaults/evm/quorum/bootnodes.txt"
     fi
     curl -L "${BOOTNODES_URL}" > bootnodes.txt 2> /dev/null
     BOOTNODES=$(cat bootnodes.txt)

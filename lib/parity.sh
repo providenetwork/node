@@ -16,7 +16,7 @@ fi
 
 if [ ! -f "${CHAIN_SPEC}" ] || [ ! -s "${CHAIN_SPEC}" ]; then
   if [[ -z "${CHAIN_SPEC_URL}" ]]; then
-    CHAIN_SPEC_URL="https://raw.githubusercontent.com/providenetwork/chain-spec/${CHAIN}/spec.json"
+    CHAIN_SPEC_URL="https://raw.githubusercontent.com/providenetwork/node/dev/genesis/defaults/evm/parity/spec.json"
   fi
   curl -L "${CHAIN_SPEC_URL}" > "${CHAIN_SPEC}" 2> /dev/null
 fi
@@ -24,7 +24,7 @@ fi
 if [[ -z "${BOOTNODES}" ]]; then
   if [ ! -f bootnodes.txt ] || [ ! -s bootnodes.txt ]; then
     if [[ -z "${BOOTNODES_URL}" ]]; then
-      BOOTNODES_URL="https://raw.githubusercontent.com/providenetwork/chain-spec/${CHAIN}/bootnodes.txt"
+      BOOTNODES_URL="https://raw.githubusercontent.com/providenetwork/node/dev/genesis/defaults/evm/parity/bootnodes.txt"
     fi
     curl -L "${BOOTNODES_URL}" > bootnodes.txt 2> /dev/null
     BOOTNODES=$(cat bootnodes.txt)
