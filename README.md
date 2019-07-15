@@ -15,7 +15,12 @@ The following EVM-based clients and protocols are currently supported (in no par
 
 The following [Bcoin](https://bcoin.io) protocols are supported:
 
+  - [Bitcoin](https://github.com/bcoin-org/bcoin)
   - [Handshake](https://handshake-org.github.io)
+
+## Hyperledger Support
+
+[Hyperledger](https://www.hyperledger.org/) protocol support is still a work in progress. Documentation forthcoming.
 
 ## IPFS Support
 
