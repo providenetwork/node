@@ -171,55 +171,107 @@ then
       BLOCKTIME=5
     fi
 
-    $QUORUM_BIN --config $CHAIN_SPEC \
-                --datadir "${BASE_PATH}" \
-                --networkid "${NETWORK_ID}" \
-                --bootnodes "${BOOTNODES}" \
-                --trace "${LOG_PATH}" \
-                --port $PORT \
-                --rpc \
-                --rpcapi $JSON_RPC_APIS \
-                --rpcaddr $JSON_RPC_INTERFACE \
-                --rpcport $JSON_RPC_PORT \
-                --rpccorsdomain $JSON_RPC_CORS \
-                --ws \
-                --wsapi $WS_APIS \
-                --wsaddr $WS_INTERFACE \
-                --wsport $WS_PORT \
-                --wsorigins $WS_ORIGINS \
-                --password "${ENGINE_SIGNER_KEY_PATH}" \
-                --etherbase $COINBASE \
-                --identity "${IDENTITY}" \
-                --syncmode "${SYNC_MODE}" \
-                --debug \
-                --vmdebug \
-                --istanbul.blockperiod ${BLOCKTIME} \
-                --emitcheckpoints
+    if [[ -z "${BOOTNODES}" ]]; then
+      $QUORUM_BIN --config $CHAIN_SPEC \
+                  --datadir "${BASE_PATH}" \
+                  --networkid "${NETWORK_ID}" \
+                  --trace "${LOG_PATH}" \
+                  --port $PORT \
+                  --rpc \
+                  --rpcapi $JSON_RPC_APIS \
+                  --rpcaddr $JSON_RPC_INTERFACE \
+                  --rpcport $JSON_RPC_PORT \
+                  --rpccorsdomain $JSON_RPC_CORS \
+                  --ws \
+                  --wsapi $WS_APIS \
+                  --wsaddr $WS_INTERFACE \
+                  --wsport $WS_PORT \
+                  --wsorigins $WS_ORIGINS \
+                  --password "${ENGINE_SIGNER_KEY_PATH}" \
+                  --etherbase $COINBASE \
+                  --identity "${IDENTITY}" \
+                  --syncmode "${SYNC_MODE}" \
+                  --debug \
+                  --vmdebug \
+                  --istanbul.blockperiod ${BLOCKTIME} \
+                  --emitcheckpoints
+    else
+      $QUORUM_BIN --config $CHAIN_SPEC \
+                  --datadir "${BASE_PATH}" \
+                  --networkid "${NETWORK_ID}" \
+                  --bootnodes "${BOOTNODES}" \
+                  --trace "${LOG_PATH}" \
+                  --port $PORT \
+                  --rpc \
+                  --rpcapi $JSON_RPC_APIS \
+                  --rpcaddr $JSON_RPC_INTERFACE \
+                  --rpcport $JSON_RPC_PORT \
+                  --rpccorsdomain $JSON_RPC_CORS \
+                  --ws \
+                  --wsapi $WS_APIS \
+                  --wsaddr $WS_INTERFACE \
+                  --wsport $WS_PORT \
+                  --wsorigins $WS_ORIGINS \
+                  --password "${ENGINE_SIGNER_KEY_PATH}" \
+                  --etherbase $COINBASE \
+                  --identity "${IDENTITY}" \
+                  --syncmode "${SYNC_MODE}" \
+                  --debug \
+                  --vmdebug \
+                  --istanbul.blockperiod ${BLOCKTIME} \
+                  --emitcheckpoints
+    fi
+
   elif [ "${CONSENSUS}" == "raft" ]; then
-    $QUORUM_BIN --config $CHAIN_SPEC \
-                --datadir "${BASE_PATH}" \
-                --networkid "${NETWORK_ID}" \
-                --bootnodes "${BOOTNODES}" \
-                --trace "${LOG_PATH}" \
-                --port $PORT \
-                --rpc \
-                --rpcapi $JSON_RPC_APIS \
-                --rpcaddr $JSON_RPC_INTERFACE \
-                --rpcport $JSON_RPC_PORT \
-                --rpccorsdomain $JSON_RPC_CORS \
-                --ws \
-                --wsapi $WS_APIS \
-                --wsaddr $WS_INTERFACE \
-                --wsport $WS_PORT \
-                --wsorigins $WS_ORIGINS \
-                --password "${ENGINE_SIGNER_KEY_PATH}" \
-                --etherbase $COINBASE \
-                --identity "${IDENTITY}" \
-                --syncmode "${SYNC_MODE}" \
-                --debug \
-                --vmdebug \
-                --raft \
-                --emitcheckpoints
+    if [[ -z "${BOOTNODES}" ]]; then
+      $QUORUM_BIN --config $CHAIN_SPEC \
+                  --datadir "${BASE_PATH}" \
+                  --networkid "${NETWORK_ID}" \
+                  --trace "${LOG_PATH}" \
+                  --port $PORT \
+                  --rpc \
+                  --rpcapi $JSON_RPC_APIS \
+                  --rpcaddr $JSON_RPC_INTERFACE \
+                  --rpcport $JSON_RPC_PORT \
+                  --rpccorsdomain $JSON_RPC_CORS \
+                  --ws \
+                  --wsapi $WS_APIS \
+                  --wsaddr $WS_INTERFACE \
+                  --wsport $WS_PORT \
+                  --wsorigins $WS_ORIGINS \
+                  --password "${ENGINE_SIGNER_KEY_PATH}" \
+                  --etherbase $COINBASE \
+                  --identity "${IDENTITY}" \
+                  --syncmode "${SYNC_MODE}" \
+                  --debug \
+                  --vmdebug \
+                  --raft \
+                  --emitcheckpoints
+    else
+      $QUORUM_BIN --config $CHAIN_SPEC \
+                  --datadir "${BASE_PATH}" \
+                  --networkid "${NETWORK_ID}" \
+                  --bootnodes "${BOOTNODES}" \
+                  --trace "${LOG_PATH}" \
+                  --port $PORT \
+                  --rpc \
+                  --rpcapi $JSON_RPC_APIS \
+                  --rpcaddr $JSON_RPC_INTERFACE \
+                  --rpcport $JSON_RPC_PORT \
+                  --rpccorsdomain $JSON_RPC_CORS \
+                  --ws \
+                  --wsapi $WS_APIS \
+                  --wsaddr $WS_INTERFACE \
+                  --wsport $WS_PORT \
+                  --wsorigins $WS_ORIGINS \
+                  --password "${ENGINE_SIGNER_KEY_PATH}" \
+                  --etherbase $COINBASE \
+                  --identity "${IDENTITY}" \
+                  --syncmode "${SYNC_MODE}" \
+                  --debug \
+                  --vmdebug \
+                  --raft \
+                  --emitcheckpoints
 
     # PRIVATE_CONFIG=qdata/c1/tm.ipc nohup geth --datadir qdata/dd1 $ARGS --permissioned --raftport 50401 --rpcport 22000 --port 21000 --unlock 0 --password passwords.txt 2>>qdata/logs/1.log &
     # PRIVATE_CONFIG=qdata/c2/tm.ipc nohup geth --datadir qdata/dd2 $ARGS --permissioned --raftport 50402 --rpcport 22001 --port 21001 --unlock 0 --password passwords.txt 2>>qdata/logs/2.log &
