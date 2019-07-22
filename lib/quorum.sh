@@ -76,15 +76,15 @@ if [ ! -f "${CHAIN_SPEC}" ] || [ ! -s "${CHAIN_SPEC}" ]; then
   cat "${CHAIN_SPEC}"
 fi
 
-if [[ -z "${BOOTNODES}" ]]; then
-  if [ ! -f bootnodes.txt ] || [ ! -s bootnodes.txt ]; then
-    if [[ -z "${BOOTNODES_URL}" ]]; then
-      BOOTNODES_URL="https://raw.githubusercontent.com/providenetwork/node/dev/genesis/defaults/evm/quorum/bootnodes.txt"
-    fi
-    curl -L "${BOOTNODES_URL}" > bootnodes.txt 2> /dev/null
-    BOOTNODES=$(cat bootnodes.txt)
-  fi
-fi
+# if [[ -z "${BOOTNODES}" ]]; then
+#   if [ ! -f bootnodes.txt ] || [ ! -s bootnodes.txt ]; then
+#     if [[ -z "${BOOTNODES_URL}" ]]; then
+#       BOOTNODES_URL="https://raw.githubusercontent.com/providenetwork/node/dev/genesis/defaults/evm/quorum/bootnodes.txt"
+#     fi
+#     curl -L "${BOOTNODES_URL}" > bootnodes.txt 2> /dev/null
+#     BOOTNODES=$(cat bootnodes.txt)
+#   fi
+# fi
 
 if [[ -z "${LOG_PATH}" ]]; then
   LOG_PATH="${BASE_PATH}/quorum.log"
