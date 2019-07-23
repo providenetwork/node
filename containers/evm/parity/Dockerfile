@@ -18,7 +18,6 @@ RUN mkdir -p /opt/provide.network
 RUN touch /opt/spec.json
 RUN touch /opt/bootnodes.txt
 
-ADD lib/* /opt/
 ADD main.sh /opt/main.sh
 
 # IPFS installation

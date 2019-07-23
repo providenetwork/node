@@ -18,45 +18,17 @@ RUN mkdir -p /opt/provide.network
 RUN touch /opt/spec.json
 RUN touch /opt/bootnodes.txt
 
+
 ADD main.sh /opt/main.sh
 
 # IPFS installation
 RUN /bin/bash -c 'curl https://dist.ipfs.io/go-ipfs/v0.4.17/go-ipfs_v0.4.17_linux-amd64.tar.gz -L > go-ipfs_v0.4.17_linux-amd64.tar.gz'
 RUN /bin/bash -c 'tar xvvf go-ipfs_v0.4.17_linux-amd64.tar.gz && pushd go-ipfs && ./install.sh && popd'
 
-# Geth installation
-RUN /bin/bash -c 'curl https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.8.17-8bbe7207.tar.gz -L > geth-linux-amd64-1.8.17-8bbe7207.tar.gz'
-RUN /bin/bash -c 'tar xvvf geth-linux-amd64-1.8.17-8bbe7207.tar.gz && cp geth-linux-amd64-1.8.17-8bbe7207/geth /usr/local/bin'
+# Parity installation
+RUN /bin/bash -c 'bash <(curl https://get.parity.io -L)'
 
-EXPOSE 53
-EXPOSE 4000
 EXPOSE 5001
-EXPOSE 5300
-EXPOSE 8000
-EXPOSE 8050
-EXPOSE 8051
 EXPOSE 8080
-EXPOSE 8332
-EXPOSE 9001
-EXPOSE 12037
-EXPOSE 12038
-EXPOSE 12039
-EXPOSE 13037
-EXPOSE 13038
-EXPOSE 13039
-EXPOSE 14037
-EXPOSE 14038
-EXPOSE 14039
-EXPOSE 15037
-EXPOSE 15038
-EXPOSE 15039
-EXPOSE 15349
-EXPOSE 15350
-EXPOSE 15359
-EXPOSE 15360
-EXPOSE 18332
-EXPOSE 18556
-EXPOSE 30300
-EXPOSE 46657
 
-ENTRYPOINT ["./main.sh"]
+ENTRYPOINT ["./ipfs.sh"]

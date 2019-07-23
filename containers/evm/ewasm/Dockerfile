@@ -18,15 +18,15 @@ RUN mkdir -p /opt/provide.network
 RUN touch /opt/spec.json
 RUN touch /opt/bootnodes.txt
 
-ADD lib/* /opt/
 ADD main.sh /opt/main.sh
+ADD setup.sh /opt/setup.sh
 
 # IPFS installation
 RUN /bin/bash -c 'curl https://dist.ipfs.io/go-ipfs/v0.4.17/go-ipfs_v0.4.17_linux-amd64.tar.gz -L > go-ipfs_v0.4.17_linux-amd64.tar.gz'
 RUN /bin/bash -c 'tar xvvf go-ipfs_v0.4.17_linux-amd64.tar.gz && pushd go-ipfs && ./install.sh && popd'
 
 # ewasm & Aleth (formerly Ethereum C++) installation
-RUN ./ewasm-cpp-eth-setup.sh
+RUN ./setup.sh
 
 EXPOSE 53
 EXPOSE 4000
