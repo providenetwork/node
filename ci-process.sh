@@ -161,14 +161,14 @@ get_build_info
 echo '....[PRVD] AWS Worldwide Distribution....'
 
 # bcoin
-build_and_deploy images/bcoin/bitcoin, "provide.network/node/bcoin", "providenetwork-bcoin-node"
-build_and_deploy images/bcoin/handshake, "provide.network/node/handshake", "providenetwork-handshake-node"
+build_and_deploy ./images/bcoin/bitcoin "provide.network/node/bcoin" "providenetwork-bcoin-node"
+build_and_deploy ./images/bcoin/handshake "provide.network/node/handshake" "providenetwork-handshake-node"
 
 # evm
-build_and_deploy images/evm/ewasm, "provide.network/node/ewasm", "providenetwork-ewasm-node"
-build_and_deploy images/evm/geth, "provide.network/node/geth", "providenetwork-geth-node"
-build_and_deploy images/evm/parity, "provide.network/node/parity", "providenetwork-parity-node"
-build_and_deploy images/evm/parity-aura-pos, "provide.network/node/parity-aura-pos", "providenetwork-parity-aura-pos-node"
-build_and_deploy images/evm/quorum, "provide.network/node/quorum", "providenetwork-quorum-node"
+build_and_deploy ./images/evm/ewasm "provide.network/node/ewasm" "providenetwork-ewasm-node"
+build_and_deploy ./images/evm/geth "provide.network/node/geth" "providenetwork-geth-node"
+build_and_deploy ./images/evm/parity "provide.network/node/parity" "providenetwork-parity-node"
+build_and_deploy ./images/evm/parity-aura-pos "provide.network/node/parity-aura-pos" "providenetwork-parity-aura-pos-node"
+build_and_deploy ./images/evm/quorum "provide.network/node/quorum" "providenetwork-quorum-node"
 
 echo '....CI process completed....'
