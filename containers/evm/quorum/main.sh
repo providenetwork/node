@@ -67,13 +67,21 @@ if [[ -z "${CHAIN_SPEC}" ]]; then
   CHAIN_SPEC=spec.json
 fi
 
+echo "check if CHAIN_SPEC exists"
 if [ ! -f "${CHAIN_SPEC}" ] || [ ! -s "${CHAIN_SPEC}" ]; then
+  echo "check CHAIN_SPEC_URL"
+  echo "${CHAIN_SPEC_URL}"
   if [[ -z "${CHAIN_SPEC_URL}" ]]; then
     CHAIN_SPEC_URL="https://raw.githubusercontent.com/providenetwork/node/dev/genesis/defaults/evm/quorum/spec.json"
   fi
-  curl -L "${CHAIN_SPEC_URL}" > "${CHAIN_SPEC}" 2> /dev/null
-  json2toml -o "${CHAIN_SPEC}" "${CHAIN_SPEC}" 2> /dev/null
+  echo "get CHAIN_SPEC_URL to file"
+  curl -L "${CHAIN_SPEC_URL}" > "${CHAIN_SPEC}" #2> /dev/null
+  # echo "convert CHAIN_SPEC"
+  # json2toml -o "${CHAIN_SPEC}" "spec.toml" #2> /dev/null
+  echo "output CHAIN_SPEC"
   cat "${CHAIN_SPEC}"
+  # echo "output TOML"
+  # cat "spec.toml"
 fi
 
 # if [[ -z "${BOOTNODES}" ]]; then
@@ -150,7 +158,7 @@ fi
 chmod 0600 "${ENGINE_SIGNER_KEY_PATH}"
 
 if [[ -z "${COINBASE}" ]]; then
-  COINBASE=$ENGINE_SIGNER
+  COINBASE="0x$ENGINE_SIGNER"
 fi
 
 if [[ -z "${IDENTITY}" ]]; then
@@ -162,9 +170,75 @@ if [[ -z "${SYNC_MODE}" ]]; then
 fi
 
 QUORUM_BIN=$(which quorum-geth)
+QUORUM_BOOTNODE_BIN=$(which quorum-bootnode)
 if [ $? -eq 0 ]
 then
   echo "provide.network quorum node starting in ${BASE_PATH}; CONSENSUS: ${CONSENSUS}; quorum bin: ${QUORUM_BIN}"
+
+  mkdir quorum-node-1
+  mkdir quorum-node-1/keystore
+  curl -L "${ENGINE_SIGNER_KEY_URL}" > "quorum-node-1/keystore/UTC--${ENGINE_SIGNER_UTC}--${ENGINE_SIGNER}" 2> /dev/null
+
+  # password1=quorum-node-1/password
+  # echo "verySTRONGpassword1" > quorum-node-1/password
+  # $QUORUM_BIN --datadir quorum-node-1 account new --password "${BASE_PATH}/quorum-node-1/password"
+  # $QUORUM_BIN --datadir quorum-node-1 account new --password <(echo $mypassword)
+
+  $QUORUM_BIN account list --keystore "quorum-node-1/keystore"
+  # $QUORUM_BIN account import "${BASE_PATH}/keys/UTC--${ENGINE_SIGNER_UTC}--${ENGINE_SIGNER}"
+
+  echo $BASE_PATH
+  # ls "${BASE_PATH}"
+  ls "${BASE_PATH}/quorum-node-1/keystore"
+  # ls "${BASE_PATH}/keys"
+
+  for f in "${BASE_PATH}/quorum-node-1/keystore/*"
+  do 
+    cat $f
+  done
+
+  $QUORUM_BOOTNODE_BIN --genkey=nodekey
+  cp nodekey quorum-node-1/
+  
+  $QUORUM_BOOTNODE_BIN --nodekey=quorum-node-1/nodekey --writeaddress > quorum-node-1/enode
+  ENODE1=$(cat quorum-node-1/enode)
+  echo "[\"enode://${ENODE1}@127.0.0.1:21000?discport=0&raftport=50000\"]" > quorum-node-1/static-nodes.json
+  echo "bootnodes:"
+  cat quorum-node-1/static-nodes.json
+  # BOOTNODES=$(cat quorum-node-1/static-nodes.json)
+
+  echo ${CHAIN_SPEC}
+  cat ${CHAIN_SPEC}
+
+  $QUORUM_BIN --datadir quorum-node-1 init ${CHAIN_SPEC}
+
+  echo "ipc:"
+  cat quorum-node-1/geth.ipc
+  echo ""
+
+  CONFIG_TOML="${BASE_PATH}/config.toml"
+  $QUORUM_BIN --datadir "${BASE_PATH}/quorum-node-1" --networkid "${NETWORK_ID}" \
+              --trace "${LOG_PATH}" \
+              --port $PORT \
+              --rpc \
+              --rpcapi $JSON_RPC_APIS \
+              --rpcaddr $JSON_RPC_INTERFACE \
+              --rpcport $JSON_RPC_PORT \
+              --rpccorsdomain $JSON_RPC_CORS \
+              --ws \
+              --wsapi $WS_APIS \
+              --wsaddr $WS_INTERFACE \
+              --wsport $WS_PORT \
+              --wsorigins $WS_ORIGINS \
+              --password "${ENGINE_SIGNER_KEY_PATH}" \
+              --etherbase $COINBASE \
+              --identity "${IDENTITY}" \
+              --syncmode "${SYNC_MODE}" \
+              --debug \
+              --vmdebug \
+              --emitcheckpoints dumpconfig > $CONFIG_TOML
+  echo "Starting network with config"
+  cat $CONFIG_TOML
 
   if [ "${CONSENSUS}" == "istanbul" ]; then
     if [[ -z "${BLOCKTIME}" ]]; then
@@ -172,106 +246,22 @@ then
     fi
 
     if [[ -z "${BOOTNODES}" ]]; then
-      $QUORUM_BIN --config $CHAIN_SPEC \
-                  --datadir "${BASE_PATH}" \
-                  --networkid "${NETWORK_ID}" \
-                  --trace "${LOG_PATH}" \
-                  --port $PORT \
-                  --rpc \
-                  --rpcapi $JSON_RPC_APIS \
-                  --rpcaddr $JSON_RPC_INTERFACE \
-                  --rpcport $JSON_RPC_PORT \
-                  --rpccorsdomain $JSON_RPC_CORS \
-                  --ws \
-                  --wsapi $WS_APIS \
-                  --wsaddr $WS_INTERFACE \
-                  --wsport $WS_PORT \
-                  --wsorigins $WS_ORIGINS \
-                  --password "${ENGINE_SIGNER_KEY_PATH}" \
-                  --etherbase $COINBASE \
-                  --identity "${IDENTITY}" \
-                  --syncmode "${SYNC_MODE}" \
-                  --debug \
-                  --vmdebug \
-                  --istanbul.blockperiod ${BLOCKTIME} \
-                  --emitcheckpoints
+      PRIVATE_CONFIG=ignore $QUORUM_BIN --config $CONFIG_TOML \
+                  --istanbul.blockperiod ${BLOCKTIME} 
     else
-      $QUORUM_BIN --config $CHAIN_SPEC \
-                  --datadir "${BASE_PATH}" \
-                  --networkid "${NETWORK_ID}" \
+      PRIVATE_CONFIG=ignore $QUORUM_BIN --config $CONFIG_TOML \
                   --bootnodes "${BOOTNODES}" \
-                  --trace "${LOG_PATH}" \
-                  --port $PORT \
-                  --rpc \
-                  --rpcapi $JSON_RPC_APIS \
-                  --rpcaddr $JSON_RPC_INTERFACE \
-                  --rpcport $JSON_RPC_PORT \
-                  --rpccorsdomain $JSON_RPC_CORS \
-                  --ws \
-                  --wsapi $WS_APIS \
-                  --wsaddr $WS_INTERFACE \
-                  --wsport $WS_PORT \
-                  --wsorigins $WS_ORIGINS \
-                  --password "${ENGINE_SIGNER_KEY_PATH}" \
-                  --etherbase $COINBASE \
-                  --identity "${IDENTITY}" \
-                  --syncmode "${SYNC_MODE}" \
-                  --debug \
-                  --vmdebug \
-                  --istanbul.blockperiod ${BLOCKTIME} \
-                  --emitcheckpoints
+                  --istanbul.blockperiod ${BLOCKTIME}
     fi
 
   elif [ "${CONSENSUS}" == "raft" ]; then
     if [[ -z "${BOOTNODES}" ]]; then
-      $QUORUM_BIN --config $CHAIN_SPEC \
-                  --datadir "${BASE_PATH}" \
-                  --networkid "${NETWORK_ID}" \
-                  --trace "${LOG_PATH}" \
-                  --port $PORT \
-                  --rpc \
-                  --rpcapi $JSON_RPC_APIS \
-                  --rpcaddr $JSON_RPC_INTERFACE \
-                  --rpcport $JSON_RPC_PORT \
-                  --rpccorsdomain $JSON_RPC_CORS \
-                  --ws \
-                  --wsapi $WS_APIS \
-                  --wsaddr $WS_INTERFACE \
-                  --wsport $WS_PORT \
-                  --wsorigins $WS_ORIGINS \
-                  --password "${ENGINE_SIGNER_KEY_PATH}" \
-                  --etherbase $COINBASE \
-                  --identity "${IDENTITY}" \
-                  --syncmode "${SYNC_MODE}" \
-                  --debug \
-                  --vmdebug \
-                  --raft \
-                  --emitcheckpoints
+      PRIVATE_CONFIG=ignore $QUORUM_BIN --config $CONFIG_TOML \
+                  --raft
     else
-      $QUORUM_BIN --config $CHAIN_SPEC \
-                  --datadir "${BASE_PATH}" \
-                  --networkid "${NETWORK_ID}" \
+      PRIVATE_CONFIG=ignore $QUORUM_BIN --config $CONFIG_TOML \
                   --bootnodes "${BOOTNODES}" \
-                  --trace "${LOG_PATH}" \
-                  --port $PORT \
-                  --rpc \
-                  --rpcapi $JSON_RPC_APIS \
-                  --rpcaddr $JSON_RPC_INTERFACE \
-                  --rpcport $JSON_RPC_PORT \
-                  --rpccorsdomain $JSON_RPC_CORS \
-                  --ws \
-                  --wsapi $WS_APIS \
-                  --wsaddr $WS_INTERFACE \
-                  --wsport $WS_PORT \
-                  --wsorigins $WS_ORIGINS \
-                  --password "${ENGINE_SIGNER_KEY_PATH}" \
-                  --etherbase $COINBASE \
-                  --identity "${IDENTITY}" \
-                  --syncmode "${SYNC_MODE}" \
-                  --debug \
-                  --vmdebug \
-                  --raft \
-                  --emitcheckpoints
+                  --raft
 
     # PRIVATE_CONFIG=qdata/c1/tm.ipc nohup geth --datadir qdata/dd1 $ARGS --permissioned --raftport 50401 --rpcport 22000 --port 21000 --unlock 0 --password passwords.txt 2>>qdata/logs/1.log &
     # PRIVATE_CONFIG=qdata/c2/tm.ipc nohup geth --datadir qdata/dd2 $ARGS --permissioned --raftport 50402 --rpcport 22001 --port 21001 --unlock 0 --password passwords.txt 2>>qdata/logs/2.log &
