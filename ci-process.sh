@@ -73,46 +73,83 @@ get_build_info()
     echo 'Build Ref =' $buildRef
 }
 
+build_and_deploy()
+{
+    buildPath=$1
+    dockerRepoName=$2
+    containerName=$3
+
+    pushd "${buildPath}"
+
+    echo '....[PRVD] Docker Build....'
+    sudo docker build -t "${awsEcrRepoositoryName}" .
+
+    perform_deployment "${buildPath}" "us-east-1" "${dockerRepoName}" "${containerName}"
+    perform_deployment "${buildPath}" "us-east-2" "${dockerRepoName}" "${containerName}"
+    perform_deployment "${buildPath}" "us-west-1" "${dockerRepoName}" "${containerName}"
+    perform_deployment "${buildPath}" "us-west-2" "${dockerRepoName}" "${containerName}"
+    perform_deployment "${buildPath}" "ap-south-1" "${dockerRepoName}" "${containerName}"
+    perform_deployment "${buildPath}" "ap-northeast-1" "${dockerRepoName}" "${containerName}"
+    perform_deployment "${buildPath}" "ap-northeast-2" "${dockerRepoName}" "${containerName}"
+    perform_deployment "${buildPath}" "ap-southeast-1" "${dockerRepoName}" "${containerName}"
+    perform_deployment "${buildPath}" "ap-southeast-2" "${dockerRepoName}" "${containerName}"
+    perform_deployment "${buildPath}" "ca-central-1" "${dockerRepoName}" "${containerName}"
+    perform_deployment "${buildPath}" "eu-central-1" "${dockerRepoName}" "${containerName}"
+    perform_deployment "${buildPath}" "eu-west-1" "${dockerRepoName}" "${containerName}"
+    perform_deployment "${buildPath}" "eu-west-2" "${dockerRepoName}" "${containerName}"
+    perform_deployment "${buildPath}" "eu-west-3" "${dockerRepoName}" "${containerName}"
+    perform_deployment "${buildPath}" "eu-north-1" "${dockerRepoName}" "${containerName}"
+    perform_deployment "${buildPath}" "sa-east-1" "${dockerRepoName}" "${containerName}"
+    
+    popd
+
+    # TODO: dispatch message to listeners watching for version updates
+}
+
 perform_deployment()
 {
-    awsRegion=$1
-    if [[ -z "${AWS_ACCOUNT_ID}" || -z "${awsRegion}" || -z "${AWS_ECR_REPOSITORY_NAME}" || -z "${AWS_ECS_TASK_DEFINITION_FAMILY}" ]]
+    buildPath=$1
+    awsRegion=$2
+    awsEcrRepoositoryName=$3
+    awsEcsTaskDefinitionFamily=$4
+    
+    if [[ -z "${AWS_ACCOUNT_ID}" || -z "${buildPath}" || -z "${awsRegion}" || -z "${awsEcrRepoositoryName}" || -z "${awsEcsTaskDefinitionFamily}" ]]
     then
         echo '....[PRVD] Skipping container deployment....'
     else
-        DEFINITION_FILE="ecs-task-definition.json"
-        MUNGED_FILE="ecs-task-definition-${awsRegion}-UPDATED.json"
-        MUNGED_FILE_TMP="ecs-task-definition-${awsRegion}.tmp.json"
+        taskDefinitionFile="${buildPath}/ecs-task-definition.json"
+        MUNGED_FILE="${buildPath}/ecs-task-definition-${awsRegion}-UPDATED.json"
+        MUNGED_FILE_TMP="${buildPath}/ecs-task-definition-${awsRegion}.tmp.json"
 
         export AWS_DEFAULT_REGION=$awsRegion
         $(aws ecr get-login --no-include-email --region ${awsRegion})
 
         echo '....create-repository....'
-        aws ecr create-repository --repository-name ${AWS_ECR_REPOSITORY_NAME} || true
+        aws ecr create-repository --repository-name ${awsEcrRepoositoryName} || true
 
         echo '....list-images....'
-        ECR_IMAGE_DIGEST=$(aws ecr list-images --repository-name ${AWS_ECR_REPOSITORY_NAME} | jq '.imageIds[0].imageDigest')
+        ecrImageDigest=$(aws ecr list-images --repository-name ${awsEcrRepoositoryName} | jq '.imageIds[0].imageDigest')
 
         echo '....describe-images....'
-        ECR_IMAGE=$(aws ecr describe-images --repository-name "${AWS_ECR_REPOSITORY_NAME}" --image-ids imageDigest="${ECR_IMAGE_DIGEST}" | jq '.')
+        ecrImage=$(aws ecr describe-images --repository-name "${awsEcrRepoositoryName}" --image-ids imageDigest="${ecrImageDigest}" | jq '.')
 
         echo '....load-aws-task-definition-template....'
-        ECS_TASK_DEFINITION=$(cat "${DEFINITION_FILE}" | jq 'del(.taskDefinitionArn) | del(.revision) | del(.status) | del(.compatibilities) | del(.requiresAttributes)')
+        ecsTaskDefinition=$(cat "${taskDefinitionFile}" | jq 'del(.taskDefinitionArn) | del(.revision) | del(.status) | del(.compatibilities) | del(.requiresAttributes)')
 
         echo '....file manipulation....'
-        echo $ECS_TASK_DEFINITION > $DEFINITION_FILE
-        sed -E "s/node:[a-zA-Z0-9\.-]+/node:${buildRef}/g" "./${DEFINITION_FILE}" > "./${MUNGED_FILE}"
+        echo $ecsTaskDefinition > $taskDefinitionFile
+        sed -E "s/node:[a-zA-Z0-9\.-]+/node:${buildRef}/g" "./${taskDefinitionFile}" > "./${MUNGED_FILE}"
         sed -E "s/\{\{awsAccountId\}\}/${AWS_ACCOUNT_ID}/g" "./${MUNGED_FILE}" > "./${MUNGED_FILE_TMP}"
         sed -E "s/\{\{awsRegion\}\}/${awsRegion}/g" "./${MUNGED_FILE_TMP}" > "./${MUNGED_FILE}"
 
         echo '....register-task-definition....'
-        ECS_TASK_DEFINITION_ID=$(aws ecs register-task-definition --family "${AWS_ECS_TASK_DEFINITION_FAMILY}" --cli-input-json "file://${MUNGED_FILE}" | jq '.taskDefinition.taskDefinitionArn' | sed -E 's/.*\/(.*)"$/\1/')
-        echo "${ECS_TASK_DEFINITION_ID}"
+        ecsTaskDefinition_ID=$(aws ecs register-task-definition --family "${awsEcsTaskDefinitionFamily}" --cli-input-json "file://${MUNGED_FILE}" | jq '.taskDefinition.taskDefinitionArn' | sed -E 's/.*\/(.*)"$/\1/')
+        echo "${ecsTaskDefinition_ID}"
 
-        sudo docker tag ${AWS_ECR_REPOSITORY_NAME}:latest "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:${buildRef}"
-        sudo docker tag ${AWS_ECR_REPOSITORY_NAME}:latest "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:latest"
-        sudo docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:${buildRef}"
-        sudo docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:latest"
+        sudo docker tag ${awsEcrRepoositoryName}:latest "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${awsEcrRepoositoryName}:${buildRef}"
+        sudo docker tag ${awsEcrRepoositoryName}:latest "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${awsEcrRepoositoryName}:latest"
+        sudo docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${awsEcrRepoositoryName}:${buildRef}"
+        sudo docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${awsEcrRepoositoryName}:latest"
     fi
 }
 
@@ -121,28 +158,17 @@ echo '....Running the full continuous integration process....'
 setup_deployment_tools
 get_build_info
 
-echo '....[PRVD] Docker Build....'
-sudo docker build -t "${AWS_ECR_REPOSITORY_NAME}" .
+echo '....[PRVD] AWS Worldwide Distribution....'
 
-echo '....[PRVD] AWS Worldwide Docker Distribution....'
+# bcoin
+build_and_deploy images/bcoin/bitcoin, "provide.network/node/bcoin", "providenetwork-bcoin-node"
+build_and_deploy images/bcoin/handshake, "provide.network/node/handshake", "providenetwork-handshake-node"
 
-perform_deployment "us-east-1"
-perform_deployment "us-east-2"
-perform_deployment "us-west-1"
-perform_deployment "us-west-2"
-perform_deployment "ap-south-1"
-perform_deployment "ap-northeast-1"
-perform_deployment "ap-northeast-2"
-perform_deployment "ap-southeast-1"
-perform_deployment "ap-southeast-2"
-perform_deployment "ca-central-1"
-perform_deployment "eu-central-1"
-perform_deployment "eu-west-1"
-perform_deployment "eu-west-2"
-perform_deployment "eu-west-3"
-perform_deployment "eu-north-1"
-perform_deployment "sa-east-1"
-
-# TODO: dispatch message to listeners watching for version updates
+# evm
+build_and_deploy images/evm/ewasm, "provide.network/node/ewasm", "providenetwork-ewasm-node"
+build_and_deploy images/evm/geth, "provide.network/node/geth", "providenetwork-geth-node"
+build_and_deploy images/evm/parity, "provide.network/node/parity", "providenetwork-parity-node"
+build_and_deploy images/evm/parity-aura-pos, "provide.network/node/parity-aura-pos", "providenetwork-parity-aura-pos-node"
+build_and_deploy images/evm/quorum, "provide.network/node/quorum", "providenetwork-quorum-node"
 
 echo '....CI process completed....'
