@@ -18,7 +18,7 @@ RUN mkdir -p /opt/provide.network
 RUN touch /opt/spec.json
 RUN touch /opt/bootnodes.txt
 
-ADD ../../ipfs/main.sh /opt/ipfs.sh
+ADD ipfs.sh /opt/ipfs.sh
 ADD main.sh /opt/main.sh
 ADD hnscan.sh /opt/hnscan.sh
 
