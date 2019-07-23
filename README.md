@@ -1,22 +1,22 @@
 # provide.network/node
 
-This is an all-in-one node that is compatible with select blockchain protocols and blockexplorers which can be configured using a semi-uniform set of configuration options provide.network.
+This is a library of p2p clients representing select blockchain and distributed filesystem protocols and related utilities (i.e., blockexplorers and other developer tools). Application containers built from this repository can be configured using a standard set of configuration options.
 
 ## EVM Support
 
 The following EVM-based clients and protocols are currently supported (in no particular order):
 
-  - [Parity](https://wiki.parity.io/Parity-Ethereum) - [Authority Round PoA](https://wiki.parity.io/Aura); a highly-upgradeable Aura implementation lives in [this repo](https://github.com/providenetwork/network-consensus-contracts); ~~PoW~~ supported (`parity.sh`)
-  - [Geth](https://github.com/ethereum/go-ethereum/wiki/geth) vanilla Clique PoA & PoW supported (`geth.sh`)
-  - [Quorum](https://github.com/jpmorganchase/quorum) - [IBFT](https://github.com/ethereum/EIPs/issues/650) with [Constellation](https://github.com/jpmorganchase/constellation); ~~[Raft](https://raft.github.io)~~ (`quorum.sh`)
-  - [ewasm](https://github.com/ewasm/design) - [ewasm testnet PR #50](https://github.com/ewasm/testnet/pull/50)
+- [Parity](https://wiki.parity.io/Parity-Ethereum) - [Authority Round PoA](https://wiki.parity.io/Aura); a highly-upgradeable Aura implementation lives in [this repo](https://github.com/providenetwork/network-consensus-contracts); ~~PoW~~ supported (`parity.sh`)
+- [Geth](https://github.com/ethereum/go-ethereum/wiki/geth) vanilla Clique PoA & PoW supported (`geth.sh`)
+- [Quorum](https://github.com/jpmorganchase/quorum) - [IBFT](https://github.com/ethereum/EIPs/issues/650) with [Constellation](https://github.com/jpmorganchase/constellation); ~~[Raft](https://raft.github.io)~~ (`quorum.sh`)
+- [ewasm](https://github.com/ewasm/design) - [ewasm testnet PR #50](https://github.com/ewasm/testnet/pull/50)
 
 ## Bcoin Support
 
 The following [Bcoin](https://bcoin.io) protocols are supported:
 
-  - [Bitcoin](https://github.com/bcoin-org/bcoin)
-  - [Handshake](https://handshake-org.github.io)
+- [Bitcoin](https://github.com/bcoin-org/bcoin)
+- [Handshake](https://handshake-org.github.io)
 
 ## Hyperledger Support
 
