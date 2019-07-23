@@ -82,7 +82,7 @@ build_and_deploy()
     pushd "${buildPath}"
 
     echo '....[PRVD] Docker Build....'
-    sudo docker build -t "${awsEcrRepoositoryName}" .
+    sudo docker build -t "${dockerRepoName}" .
 
     perform_deployment "${buildPath}" "us-east-1" "${dockerRepoName}" "${containerName}"
     perform_deployment "${buildPath}" "us-east-2" "${dockerRepoName}" "${containerName}"
