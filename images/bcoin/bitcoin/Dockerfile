@@ -25,19 +25,8 @@ ADD main.sh /opt/main.sh
 RUN /bin/bash -c 'curl https://dist.ipfs.io/go-ipfs/v0.4.17/go-ipfs_v0.4.17_linux-amd64.tar.gz -L > go-ipfs_v0.4.17_linux-amd64.tar.gz'
 RUN /bin/bash -c 'tar xvvf go-ipfs_v0.4.17_linux-amd64.tar.gz && pushd go-ipfs && ./install.sh && popd'
 
-# Quorum installation
-RUN /bin/bash -c 'git clone https://github.com/jpmorganchase/quorum.git && pushd quorum && make all && popd'
-RUN /bin/bash -c 'cp quorum/build/bin/bootnode /usr/local/bin/quorum-bootnode && cp quorum/build/bin/geth /usr/local/bin/quorum-geth'
-
-# Constellation installation
-RUN /bin/bash -c 'curl https://github.com/jpmorganchase/constellation/releases/download/v0.3.5-build.1/constellation-0.3.5-ubuntu1604.tar.gz -L > constellation-0.3.5-ubuntu1604.tar.gz'
-RUN /bin/bash -c 'tar xvvf constellation-0.3.5-ubuntu1604.tar.gz && cp constellation-node /usr/local/bin/constellation-node'
-
-# Tessera installation
-RUN /bin/bash -c 'curl https://github.com/jpmorganchase/tessera/releases/download/tessera-0.6/tessera-app-0.6-app.jar -L > /opt/tessera-app.jar'
-
-# remarshal installation
-RUN /bin/bash -c 'git clone https://github.com/dbohdan/remarshal.git && pushd remarshal && python setup.py install && popd'
+# Bcoin installation
+RUN /bin/bash -c 'git clone git://github.com/bcoin-org/bcoin.git && pushd ./bcoin && npm install --production && popd'
 
 EXPOSE 53
 EXPOSE 4000
