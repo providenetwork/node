@@ -115,7 +115,7 @@ if [[ -z "${JSON_RPC_CORS}" ]]; then
 fi
 
 if [[ -z "${WS_APIS}" ]]; then
-  WS_APIS="web3,eth,pubsub,net,parity,parity_pubsub,traces,rpc,shh,shh_pubsub,quorum,${CONSENSUS}"
+  WS_APIS="web3,eth,pubsub,net,traces,rpc,shh,shh_pubsub,quorum,${CONSENSUS}"
 fi
 
 if [[ -z "${WS_PORT}" ]]; then
@@ -175,93 +175,115 @@ if [ $? -eq 0 ]
 then
   echo "provide.network quorum node starting in ${BASE_PATH}; CONSENSUS: ${CONSENSUS}; quorum bin: ${QUORUM_BIN}"
 
-  mkdir quorum-node-1
-  mkdir quorum-node-1/keystore
-  curl -L "${ENGINE_SIGNER_KEY_URL}" > "quorum-node-1/keystore/UTC--${ENGINE_SIGNER_UTC}--${ENGINE_SIGNER}" 2> /dev/null
-
-  # password1=quorum-node-1/password
-  # echo "verySTRONGpassword1" > quorum-node-1/password
-  # $QUORUM_BIN --datadir quorum-node-1 account new --password "${BASE_PATH}/quorum-node-1/password"
-  # $QUORUM_BIN --datadir quorum-node-1 account new --password <(echo $mypassword)
-
-  $QUORUM_BIN account list --keystore "quorum-node-1/keystore"
-  # $QUORUM_BIN account import "${BASE_PATH}/keys/UTC--${ENGINE_SIGNER_UTC}--${ENGINE_SIGNER}"
-
-  echo $BASE_PATH
-  # ls "${BASE_PATH}"
-  ls "${BASE_PATH}/quorum-node-1/keystore"
-  # ls "${BASE_PATH}/keys"
-
-  for f in "${BASE_PATH}/quorum-node-1/keystore/*"
-  do 
-    cat $f
-  done
-
-  $QUORUM_BOOTNODE_BIN --genkey=nodekey
-  cp nodekey quorum-node-1/
-  
-  $QUORUM_BOOTNODE_BIN --nodekey=quorum-node-1/nodekey --writeaddress > quorum-node-1/enode
-  ENODE1=$(cat quorum-node-1/enode)
-  echo "[\"enode://${ENODE1}@127.0.0.1:21000?discport=0&raftport=50000\"]" > quorum-node-1/static-nodes.json
-  echo "bootnodes:"
-  cat quorum-node-1/static-nodes.json
-  # BOOTNODES=$(cat quorum-node-1/static-nodes.json)
-
-  echo ${CHAIN_SPEC}
-  cat ${CHAIN_SPEC}
-
-  $QUORUM_BIN --datadir quorum-node-1 init ${CHAIN_SPEC}
-
-  echo "ipc:"
-  cat quorum-node-1/geth.ipc
-  echo ""
-
-  CONFIG_TOML="${BASE_PATH}/config.toml"
-  $QUORUM_BIN --datadir "${BASE_PATH}/quorum-node-1" --networkid "${NETWORK_ID}" \
-              --trace "${LOG_PATH}" \
-              --port $PORT \
-              --rpc \
-              --rpcapi $JSON_RPC_APIS \
-              --rpcaddr $JSON_RPC_INTERFACE \
-              --rpcport $JSON_RPC_PORT \
-              --rpccorsdomain $JSON_RPC_CORS \
-              --ws \
-              --wsapi $WS_APIS \
-              --wsaddr $WS_INTERFACE \
-              --wsport $WS_PORT \
-              --wsorigins $WS_ORIGINS \
-              --password "${ENGINE_SIGNER_KEY_PATH}" \
-              --etherbase $COINBASE \
-              --identity "${IDENTITY}" \
-              --syncmode "${SYNC_MODE}" \
-              --debug \
-              --vmdebug \
-              --emitcheckpoints dumpconfig > $CONFIG_TOML
-  echo "Starting network with config"
-  cat $CONFIG_TOML
-
   if [ "${CONSENSUS}" == "istanbul" ]; then
     if [[ -z "${BLOCKTIME}" ]]; then
       BLOCKTIME=5
     fi
 
+    CONFIG_TOML="${BASE_PATH}/config.toml"
+    $QUORUM_BIN --datadir "${BASE_PATH}/quorum-node-1" --networkid "${NETWORK_ID}" \
+                --trace "${LOG_PATH}" \
+                --port $PORT \
+                --rpc \
+                --rpcapi $JSON_RPC_APIS \
+                --rpcaddr $JSON_RPC_INTERFACE \
+                --rpcport $JSON_RPC_PORT \
+                --rpccorsdomain $JSON_RPC_CORS \
+                --ws \
+                --wsapi $WS_APIS \
+                --wsaddr $WS_INTERFACE \
+                --wsport $WS_PORT \
+                --wsorigins $WS_ORIGINS \
+                --password "${ENGINE_SIGNER_KEY_PATH}" \
+                --etherbase $COINBASE \
+                --identity "${IDENTITY}" \
+                --syncmode "${SYNC_MODE}" \
+                --debug \
+                --vmdebug \
+                --emitcheckpoints dumpconfig > $CONFIG_TOML
+                    
+    echo "Starting network with config"
+    cat $CONFIG_TOML
+
     if [[ -z "${BOOTNODES}" ]]; then
-      PRIVATE_CONFIG=ignore $QUORUM_BIN --config $CONFIG_TOML \
-                  --istanbul.blockperiod ${BLOCKTIME} 
+      PRIVATE_CONFIG=ignore nohup $QUORUM_BIN --config $CONFIG_TOML \
+                  --istanbul.blockperiod ${BLOCKTIME} >> node.log 2>&1 &
     else
-      PRIVATE_CONFIG=ignore $QUORUM_BIN --config $CONFIG_TOML \
+      PRIVATE_CONFIG=ignore nohup $QUORUM_BIN --config $CONFIG_TOML \
                   --bootnodes "${BOOTNODES}" \
-                  --istanbul.blockperiod ${BLOCKTIME}
+                  --istanbul.blockperiod ${BLOCKTIME} >> node.log 2>&1 &
     fi
 
   elif [ "${CONSENSUS}" == "raft" ]; then
+    mkdir quorum-node-1
+    mkdir quorum-node-1/keystore
+    curl -L "${ENGINE_SIGNER_KEY_URL}" > "quorum-node-1/keystore/UTC--${ENGINE_SIGNER_UTC}--${ENGINE_SIGNER}" 2> /dev/null
+
+    # password1=quorum-node-1/password
+    # echo "verySTRONGpassword1" > quorum-node-1/password
+    # $QUORUM_BIN --datadir quorum-node-1 account new --password "${BASE_PATH}/quorum-node-1/password"
+    # $QUORUM_BIN --datadir quorum-node-1 account new --password <(echo $mypassword)
+
+    $QUORUM_BIN account list --keystore "quorum-node-1/keystore"
+    # $QUORUM_BIN account import "${BASE_PATH}/keys/UTC--${ENGINE_SIGNER_UTC}--${ENGINE_SIGNER}"
+
+    echo $BASE_PATH
+    # ls "${BASE_PATH}"
+    ls "${BASE_PATH}/quorum-node-1/keystore"
+    # ls "${BASE_PATH}/keys"
+
+    for f in "${BASE_PATH}/quorum-node-1/keystore/*"
+    do 
+      cat $f
+    done
+
+    $QUORUM_BOOTNODE_BIN --genkey=nodekey
+    cp nodekey quorum-node-1/
+    
+    $QUORUM_BOOTNODE_BIN --nodekey=quorum-node-1/nodekey --writeaddress > quorum-node-1/enode
+    ENODE1=$(cat quorum-node-1/enode)
+    echo "[\"enode://${ENODE1}@127.0.0.1:21000?discport=0&raftport=50000\"]" > quorum-node-1/static-nodes.json
+    echo "bootnodes:"
+    cat quorum-node-1/static-nodes.json
+    # BOOTNODES=$(cat quorum-node-1/static-nodes.json)
+
+    echo ${CHAIN_SPEC}
+    cat ${CHAIN_SPEC}
+
+    $QUORUM_BIN --datadir quorum-node-1 init ${CHAIN_SPEC}
+    
+    CONFIG_TOML="${BASE_PATH}/config.toml"
+    $QUORUM_BIN --datadir "${BASE_PATH}/quorum-node-1" --networkid "${NETWORK_ID}" \
+                --trace "${LOG_PATH}" \
+                --port $PORT \
+                --rpc \
+                --rpcapi $JSON_RPC_APIS \
+                --rpcaddr $JSON_RPC_INTERFACE \
+                --rpcport $JSON_RPC_PORT \
+                --rpccorsdomain $JSON_RPC_CORS \
+                --ws \
+                --wsapi $WS_APIS \
+                --wsaddr $WS_INTERFACE \
+                --wsport $WS_PORT \
+                --wsorigins $WS_ORIGINS \
+                --password "${ENGINE_SIGNER_KEY_PATH}" \
+                --etherbase $COINBASE \
+                --identity "${IDENTITY}" \
+                --syncmode "${SYNC_MODE}" \
+                --debug \
+                --vmdebug \
+                --emitcheckpoints dumpconfig > $CONFIG_TOML
+
+    echo "Starting network with config"
+    cat $CONFIG_TOML
+         
     if [[ -z "${BOOTNODES}" ]]; then
-      PRIVATE_CONFIG=ignore $QUORUM_BIN --config $CONFIG_TOML \
-                  --raft
+      PRIVATE_CONFIG=ignore nohup $QUORUM_BIN --config $CONFIG_TOML \
+                  --raft >> node.log 2>&1 &
     else
-      PRIVATE_CONFIG=ignore $QUORUM_BIN --config $CONFIG_TOML \
+      PRIVATE_CONFIG=ignore nohup $QUORUM_BIN --config $CONFIG_TOML \
                   --bootnodes "${BOOTNODES}" \
-                  --raft
+                  --raft >> node.log 2>&1 &
 
     # PRIVATE_CONFIG=qdata/c1/tm.ipc nohup geth --datadir qdata/dd1 $ARGS --permissioned --raftport 50401 --rpcport 22000 --port 21000 --unlock 0 --password passwords.txt 2>>qdata/logs/1.log &
     # PRIVATE_CONFIG=qdata/c2/tm.ipc nohup geth --datadir qdata/dd2 $ARGS --permissioned --raftport 50402 --rpcport 22001 --port 21001 --unlock 0 --password passwords.txt 2>>qdata/logs/2.log &
@@ -271,5 +293,22 @@ then
     # PRIVATE_CONFIG=qdata/c6/tm.ipc nohup geth --datadir qdata/dd6 $ARGS --raftport 50406 --rpcport 22005 --port 21005 --unlock 0 --password passwords.txt 2>>qdata/logs/6.log &
     # PRIVATE_CONFIG=qdata/c7/tm.ipc nohup geth --datadir qdata/dd7 $ARGS --raftport 50407 --rpcport 22006 --port 21006 --unlock 0 --password passwords.txt 2>>qdata/logs/7.log &
     fi
+
+    mkdir quorum-node-2
+    mkdir quorum-node-2/keystore
+    curl -L "${NODE2_URL}" > "quorum-node-2/keystore/UTC--${NODE2_UTC}--${NODE2}" 2> /dev/null
+
+    # echo "verySTRONGpassword2" > quorum-node-2/password
+    # $QUORUM_BIN --datadir quorum-node-2 account new --password "${BASE_PATH}/quorum-node-2/password"
+    # $QUORUM_BIN account list --keystore "quorum-node-2/keystore"
+    for f in "${BASE_PATH}/quorum-node-2/keystore/*"
+    do 
+      cat $f
+    done
+
+    CONFIG2_TOML="${BASE_PATH}/config2.toml"
+    $QUORUM_BIN --datadir "${BASE_PATH}/quorum-node-2" --networkid "${NETWORK_ID}" dumpconfig > $CONFIG2_TOML
+    $QUORUM_BIN --config $CONFIG2_TOML --raft >> node2.log 2>&1 &
+
   fi
 fi
