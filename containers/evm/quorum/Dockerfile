@@ -21,6 +21,10 @@ RUN touch /opt/bootnodes.txt
 
 ADD main.sh /opt/main.sh
 
+# Istanbul install
+# RUN /bin/bash -c 'git clone https://github.com/jpmorganchase/istanbul-tools.git && pushd istanbul-tools && make && popd'
+RUN /bin/bash -c 'go get github.com/getamis/istanbul-tools/cmd/istanbul'
+
 # IPFS installation
 RUN /bin/bash -c 'curl https://dist.ipfs.io/go-ipfs/v0.4.17/go-ipfs_v0.4.17_linux-amd64.tar.gz -L > go-ipfs_v0.4.17_linux-amd64.tar.gz'
 RUN /bin/bash -c 'tar xvvf go-ipfs_v0.4.17_linux-amd64.tar.gz && pushd go-ipfs && ./install.sh && popd'

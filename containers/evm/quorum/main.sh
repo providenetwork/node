@@ -180,10 +180,28 @@ then
       BLOCKTIME=5
     fi
 
-    CONFIG_TOML="${BASE_PATH}/config.toml"
-    $QUORUM_BIN --datadir "${BASE_PATH}/quorum-node-1" --networkid "${NETWORK_ID}" \
+    mkdir node0
+
+    cd node0
+
+    # ls $GO_PATH
+    ISTANBUL_BIN="/root/go/bin/istanbul"
+    $ISTANBUL_BIN setup --num 1 --nodes --quorum --save --verbose
+
+    cat genesis.json
+
+    mkdir -p data/geth
+
+    curl -L "${ENGINE_SIGNER_KEY_URL}" > "data/UTC--${ENGINE_SIGNER_UTC}--${ENGINE_SIGNER}" 2> /dev/null
+
+    $QUORUM_BIN --datadir data init genesis.json
+
+    CONFIG_TOML="config.toml"
+    $QUORUM_BIN --datadir "data" --networkid "${NETWORK_ID}" \
                 --trace "${LOG_PATH}" \
                 --port $PORT \
+                --mine \
+                --miner.threads 1 \
                 --rpc \
                 --rpcapi $JSON_RPC_APIS \
                 --rpcaddr $JSON_RPC_INTERFACE \
@@ -206,8 +224,8 @@ then
     cat $CONFIG_TOML
 
     if [[ -z "${BOOTNODES}" ]]; then
-      PRIVATE_CONFIG=ignore nohup $QUORUM_BIN --config $CONFIG_TOML \
-                  --istanbul.blockperiod ${BLOCKTIME} >> node.log 2>&1 &
+      PRIVATE_CONFIG=ignore $QUORUM_BIN --config $CONFIG_TOML \
+                  --istanbul.blockperiod ${BLOCKTIME} 
     else
       PRIVATE_CONFIG=ignore nohup $QUORUM_BIN --config $CONFIG_TOML \
                   --bootnodes "${BOOTNODES}" \
@@ -278,8 +296,8 @@ then
     cat $CONFIG_TOML
          
     if [[ -z "${BOOTNODES}" ]]; then
-      PRIVATE_CONFIG=ignore nohup $QUORUM_BIN --config $CONFIG_TOML \
-                  --raft >> node.log 2>&1 &
+      PRIVATE_CONFIG=ignore $QUORUM_BIN --config $CONFIG_TOML \
+                  --raft #>> node.log 2>&1 &
     else
       PRIVATE_CONFIG=ignore nohup $QUORUM_BIN --config $CONFIG_TOML \
                   --bootnodes "${BOOTNODES}" \
@@ -294,21 +312,21 @@ then
     # PRIVATE_CONFIG=qdata/c7/tm.ipc nohup geth --datadir qdata/dd7 $ARGS --raftport 50407 --rpcport 22006 --port 21006 --unlock 0 --password passwords.txt 2>>qdata/logs/7.log &
     fi
 
-    mkdir quorum-node-2
-    mkdir quorum-node-2/keystore
-    curl -L "${NODE2_URL}" > "quorum-node-2/keystore/UTC--${NODE2_UTC}--${NODE2}" 2> /dev/null
+    # mkdir quorum-node-2
+    # mkdir quorum-node-2/keystore
+    # curl -L "${NODE2_URL}" > "quorum-node-2/keystore/UTC--${NODE2_UTC}--${NODE2}" 2> /dev/null
 
-    # echo "verySTRONGpassword2" > quorum-node-2/password
-    # $QUORUM_BIN --datadir quorum-node-2 account new --password "${BASE_PATH}/quorum-node-2/password"
-    # $QUORUM_BIN account list --keystore "quorum-node-2/keystore"
-    for f in "${BASE_PATH}/quorum-node-2/keystore/*"
-    do 
-      cat $f
-    done
+    # # echo "verySTRONGpassword2" > quorum-node-2/password
+    # # $QUORUM_BIN --datadir quorum-node-2 account new --password "${BASE_PATH}/quorum-node-2/password"
+    # # $QUORUM_BIN account list --keystore "quorum-node-2/keystore"
+    # for f in "${BASE_PATH}/quorum-node-2/keystore/*"
+    # do 
+    #   cat $f
+    # done
 
-    CONFIG2_TOML="${BASE_PATH}/config2.toml"
-    $QUORUM_BIN --datadir "${BASE_PATH}/quorum-node-2" --networkid "${NETWORK_ID}" dumpconfig > $CONFIG2_TOML
-    $QUORUM_BIN --config $CONFIG2_TOML --raft >> node2.log 2>&1 &
+    # CONFIG2_TOML="${BASE_PATH}/config2.toml"
+    # $QUORUM_BIN --datadir "${BASE_PATH}/quorum-node-2" --networkid "${NETWORK_ID}" dumpconfig > $CONFIG2_TOML
+    # $QUORUM_BIN --config $CONFIG2_TOML --raft >> node2.log 2>&1 &
 
   fi
 fi
