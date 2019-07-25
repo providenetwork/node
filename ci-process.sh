@@ -161,14 +161,14 @@ get_build_info
 echo '....[PRVD] AWS Worldwide Distribution....'
 
 # bcoin
-build_and_deploy ./containers/bcoin/bitcoin "provide.network/node/bcoin" "providenetwork-bcoin-node"
-build_and_deploy ./containers/bcoin/handshake "provide.network/node/handshake" "providenetwork-handshake-node"
+# build_and_deploy ./containers/bcoin/bitcoin "provide.network/node/bcoin" "providenetwork-bcoin-node"
+# build_and_deploy ./containers/bcoin/handshake "provide.network/node/handshake" "providenetwork-handshake-node"
 
-# evm
-build_and_deploy ./containers/evm/ewasm "provide.network/node/ewasm" "providenetwork-ewasm-node"
-build_and_deploy ./containers/evm/geth "provide.network/node/geth" "providenetwork-geth-node"
-build_and_deploy ./containers/evm/parity "provide.network/node/parity" "providenetwork-parity-node"
-build_and_deploy ./containers/evm/parity-aura-pos "provide.network/node/parity-aura-pos" "providenetwork-parity-aura-pos-node"
+# # evm
+# build_and_deploy ./containers/evm/ewasm "provide.network/node/ewasm" "providenetwork-ewasm-node"
+# build_and_deploy ./containers/evm/geth "provide.network/node/geth" "providenetwork-geth-node"
+# build_and_deploy ./containers/evm/parity "provide.network/node/parity" "providenetwork-parity-node"
+# build_and_deploy ./containers/evm/parity-aura-pos "provide.network/node/parity-aura-pos" "providenetwork-parity-aura-pos-node"
 build_and_deploy ./containers/evm/quorum "provide.network/node/quorum" "providenetwork-quorum-node"
 
 # hyperledger
