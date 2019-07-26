@@ -200,7 +200,7 @@ then
     $QUORUM_BIN --datadir "data" --networkid "${NETWORK_ID}" \
                 --trace "${LOG_PATH}" \
                 --nodiscover \
-                --bootnodes "$(cat static_nodes.json | jq '.[0]' | tr -d '"')" \
+                --bootnodes "$(cat static-nodes.json | jq '.[0]' | tr -d '"')" \
                 --port $PORT \
                 --mine \
                 --miner.threads 1 \
