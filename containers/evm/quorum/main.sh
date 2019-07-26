@@ -188,7 +188,7 @@ then
     ISTANBUL_BIN="/root/go/bin/istanbul"
     $ISTANBUL_BIN setup --num 1 --nodes --quorum --save --verbose
 
-    cat genesis.json
+    # cat genesis.json
 
     mkdir -p data/geth
 
@@ -199,6 +199,8 @@ then
     CONFIG_TOML="config.toml"
     $QUORUM_BIN --datadir "data" --networkid "${NETWORK_ID}" \
                 --trace "${LOG_PATH}" \
+                --nodiscover \
+                --bootnodes "$(cat static_nodes.json | jq '.[0]' | tr -d '"')" \
                 --port $PORT \
                 --mine \
                 --miner.threads 1 \
@@ -224,8 +226,8 @@ then
     cat $CONFIG_TOML
 
     if [[ -z "${BOOTNODES}" ]]; then
-      PRIVATE_CONFIG=ignore $QUORUM_BIN --config $CONFIG_TOML \
-                  --istanbul.blockperiod ${BLOCKTIME} 
+      PRIVATE_CONFIG=ignore $QUORUM_BIN --config $CONFIG_TOML 
+                  # --istanbul.blockperiod ${BLOCKTIME} 
     else
       PRIVATE_CONFIG=ignore nohup $QUORUM_BIN --config $CONFIG_TOML \
                   --bootnodes "${BOOTNODES}" \
