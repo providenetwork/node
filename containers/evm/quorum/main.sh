@@ -195,9 +195,11 @@ then
     curl -L "${ENGINE_SIGNER_KEY_URL}" > "data/UTC--${ENGINE_SIGNER_UTC}--${ENGINE_SIGNER}" 2> /dev/null
 
     $QUORUM_BIN --datadir data init genesis.json
+    # jq '. + {"alloc": {"a0cdd6fbb5118ed61998a217511a7c028c2b000d": .alloc .87833cc11aa42aec878b86b90d77a80a871c5ed7} | del(.alloc)}' genesis.json > genesis.json
 
     CONFIG_TOML="config.toml"
     $QUORUM_BIN --datadir "data" --networkid "${NETWORK_ID}" \
+                --verbosity 5 \
                 --trace "${LOG_PATH}" \
                 --nodiscover \
                 --bootnodes "$(cat static-nodes.json | jq '.[0]' | tr -d '"')" \
@@ -217,7 +219,6 @@ then
                 --password "${ENGINE_SIGNER_KEY_PATH}" \
                 --etherbase $COINBASE \
                 --identity "${IDENTITY}" \
-                --syncmode "${SYNC_MODE}" \
                 --debug \
                 --vmdebug \
                 --emitcheckpoints dumpconfig > $CONFIG_TOML
@@ -227,7 +228,7 @@ then
 
     if [[ -z "${BOOTNODES}" ]]; then
       PRIVATE_CONFIG=ignore $QUORUM_BIN --config $CONFIG_TOML 
-                  # --istanbul.blockperiod ${BLOCKTIME} 
+                  --istanbul.blockperiod ${BLOCKTIME} 
     else
       PRIVATE_CONFIG=ignore nohup $QUORUM_BIN --config $CONFIG_TOML \
                   --bootnodes "${BOOTNODES}" \
