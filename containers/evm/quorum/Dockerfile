@@ -15,7 +15,7 @@ RUN mv go /usr/local
 ENV PATH="${PATH}:/usr/local/go/bin"
 
 # Workaround libsodium issue
-RUN /bin/bash -c 'ln -s /usr/lib/x86_64-linux-gnu/libsodium.so /usr/lib/x86_64-linux-gnu/libsodium.so.18.0.1'
+RUN /bin/bash -c 'ln -s /usr/lib/x86_64-linux-gnu/libsodium.so /usr/lib/x86_64-linux-gnu/libsodium.so.18'
 
 RUN mkdir -p /opt/provide.network
 RUN touch /opt/spec.json
