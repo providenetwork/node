@@ -192,14 +192,14 @@ then
     curl -L "${CHAIN_SPEC_URL}" > "${CHAIN_SPEC}"
     chmod 644 $CHAIN_SPEC
 
-    echo "[ \"${ENGINE_SIGNER_ENODE}\" ]" > static-nodes.json
+    echo "[ \"${ENGINE_VALIDATOR_ENODE}\" ]" > static-nodes.json
 
     # STEP 6.
     cd ..
     mkdir -p node0/data/geth
     mkdir node0/0
 
-    echo $ENGINE_SIGNER_NODEKEY > node0/0/nodekey
+    echo $ENGINE_VALIDATOR_NODEKEY > node0/0/nodekey
 
     # STEP 7.
     mkdir node0/data/keystore
