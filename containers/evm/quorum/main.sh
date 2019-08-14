@@ -166,7 +166,7 @@ if [[ -z "${IDENTITY}" ]]; then
 fi
 
 if [[ -z "${SYNC_MODE}" ]]; then
-  SYNC_MODE=light
+  SYNC_MODE=full
 fi
 
 QUORUM_BIN=$(which quorum-geth)
@@ -241,7 +241,7 @@ then
                 --bootnodes "$(cat static-nodes.json | jq '.[0]' | tr -d '"')" \
                 --port $PORT \
                 --mine \
-                --miner.threads 1 \
+                --minerthreads 1 \
                 --rpc \
                 --rpcapi $JSON_RPC_APIS \
                 --rpcaddr $JSON_RPC_INTERFACE \
@@ -252,7 +252,7 @@ then
                 --wsaddr $WS_INTERFACE \
                 --wsport $WS_PORT \
                 --wsorigins $WS_ORIGINS \
-                --password "${ENGINE_SIGNER_KEY_PATH}" \
+                --syncmode $SYNC_MODE \
                 --etherbase $COINBASE \
                 --identity "${IDENTITY}" \
                 --debug \
@@ -263,7 +263,7 @@ then
     cat $CONFIG_TOML
 
     if [[ -z "${BOOTNODES}" ]]; then
-      PRIVATE_CONFIG=ignore $QUORUM_BIN --config $CONFIG_TOML 
+      PRIVATE_CONFIG=ignore $QUORUM_BIN --config $CONFIG_TOML \
                   --istanbul.blockperiod ${BLOCKTIME} 2>>node.log
     else
       PRIVATE_CONFIG=ignore nohup $QUORUM_BIN --config $CONFIG_TOML \
