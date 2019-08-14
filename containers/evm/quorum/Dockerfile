@@ -3,7 +3,7 @@ FROM ubuntu
 USER root
 WORKDIR /opt
 
-RUN apt-get update -qq && apt-get upgrade -y && apt-get install -y sudo unattended-upgrades curl wget jq
+RUN apt-get update -qq && apt-get upgrade -y && apt-get install -y sudo unattended-upgrades curl wget jq vim rename
 RUN wget -qO- https://deb.nodesource.com/setup_11.x | sudo -E bash -
 RUN apt-get install -y git build-essential automake default-jre libcap2-bin libtool libsodium-dev python3-pip python-setuptools unbound dnsutils libunbound-dev nodejs yasm libudev-dev
 RUN ln -s $(which nodejs) /usr/local/bin/node

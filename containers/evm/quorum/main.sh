@@ -75,7 +75,7 @@ if [ ! -f "${CHAIN_SPEC}" ] || [ ! -s "${CHAIN_SPEC}" ]; then
     CHAIN_SPEC_URL="https://raw.githubusercontent.com/providenetwork/node/dev/genesis/defaults/evm/quorum/spec.json"
   fi
   echo "get CHAIN_SPEC_URL to file"
-  curl -L "${CHAIN_SPEC_URL}" > "${CHAIN_SPEC}" #2> /dev/null
+  # curl -L "${CHAIN_SPEC_URL}" > "${CHAIN_SPEC}" #2> /dev/null
   # echo "convert CHAIN_SPEC"
   # json2toml -o "${CHAIN_SPEC}" "spec.toml" #2> /dev/null
   echo "output CHAIN_SPEC"
@@ -99,7 +99,7 @@ if [[ -z "${LOG_PATH}" ]]; then
 fi
 
 if [[ -z "${PORT}" ]]; then
-  PORT=30300
+  PORT=30303
 fi
 
 if [[ -z "${JSON_RPC_INTERFACE}" ]]; then
@@ -180,22 +180,58 @@ then
       BLOCKTIME=5
     fi
 
+    # STEP 3.
     mkdir node0
 
+    # STEP 4.
+    cd node0
+    # ls $GO_PATH
+    # ISTANBUL_BIN="/root/go/bin/istanbul"
+    # $ISTANBUL_BIN setup --num 1 --nodes --quorum --save --verbose
+
+    curl -L "${CHAIN_SPEC_URL}" > "${CHAIN_SPEC}"
+    chmod 644 $CHAIN_SPEC
+
+    echo "[ \"${ENGINE_SIGNER_ENODE}\" ]" > static-nodes.json
+
+    # STEP 6.
+    cd ..
+    mkdir -p node0/data/geth
+    mkdir node0/0
+
+    echo $ENGINE_SIGNER_NODEKEY > node0/0/nodekey
+
+    # STEP 7.
+    mkdir node0/data/keystore
+    # echo "verySTRONGpassword1" > node0/password
+    # $QUORUM_BIN  --datadir node0/data account new --password "node0/password"
+    # fname=$(ls data/keystore/)
+    # gen_acc=$(jq '.address' data/keystore/$fname | tr -d '"')
+    # jq --arg na $ENGINE_SIGNER '.address = "$na"' data/keystore/$fname > data/keystore/$fname
+    # rename -v -n "s/${fname}/$ENGINE_SIGNER/" data/keystore/$fname
+
+    curl -L "${ENGINE_SIGNER_KEY_URL}" > "node0/data/keystore/UTC--${ENGINE_SIGNER_UTC}--${ENGINE_SIGNER}" 2> /dev/null
+    chmod 600 "node0/data/keystore/UTC--${ENGINE_SIGNER_UTC}--${ENGINE_SIGNER}"
+    
+    # STEP 8.
     cd node0
 
-    # ls $GO_PATH
-    ISTANBUL_BIN="/root/go/bin/istanbul"
-    $ISTANBUL_BIN setup --num 1 --nodes --quorum --save --verbose
+    cur_acc=$(jq '.alloc | to_entries | .[] | .key' genesis.json | tr -d '"')
+    # jq --arg cur_acc $cur_acc --arg na $ENGINE_SIGNER '.alloc[$na] = .alloc[$cur_acc] | del(.alloc[$cur_acc])' genesis.json > gen.json
+    # jq --arg cur_acc $cur_acc --arg na $ENGINE_SIGNER '.alloc[$na] = .alloc[$cur_acc] ' genesis.json > gen.json
+    # mv genesis.json _genesis.json
+    # mv gen.json genesis.json
+    cat genesis.json
+    cd ..
+
+    # STEP 9.
+    cp node0/0/nodekey node0/data/geth
 
     # cat genesis.json
 
-    mkdir -p data/geth
-
-    curl -L "${ENGINE_SIGNER_KEY_URL}" > "data/UTC--${ENGINE_SIGNER_UTC}--${ENGINE_SIGNER}" 2> /dev/null
-
+    # STEP 10.
+    cd node0
     $QUORUM_BIN --datadir data init genesis.json
-    # jq '. + {"alloc": {"a0cdd6fbb5118ed61998a217511a7c028c2b000d": .alloc .87833cc11aa42aec878b86b90d77a80a871c5ed7} | del(.alloc)}' genesis.json > genesis.json
 
     CONFIG_TOML="config.toml"
     $QUORUM_BIN --datadir "data" --networkid "${NETWORK_ID}" \
@@ -228,7 +264,7 @@ then
 
     if [[ -z "${BOOTNODES}" ]]; then
       PRIVATE_CONFIG=ignore $QUORUM_BIN --config $CONFIG_TOML 
-                  --istanbul.blockperiod ${BLOCKTIME} 
+                  --istanbul.blockperiod ${BLOCKTIME} 2>>node.log
     else
       PRIVATE_CONFIG=ignore nohup $QUORUM_BIN --config $CONFIG_TOML \
                   --bootnodes "${BOOTNODES}" \
