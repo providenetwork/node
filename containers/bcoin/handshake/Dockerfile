@@ -18,7 +18,6 @@ RUN mkdir -p /opt/provide.network
 RUN touch /opt/spec.json
 RUN touch /opt/bootnodes.txt
 
-
 ADD main.sh /opt/main.sh
 ADD hnscan.sh /opt/hnscan.sh
 

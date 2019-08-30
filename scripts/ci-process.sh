@@ -162,7 +162,7 @@ echo '....[PRVD] AWS Worldwide Distribution....'
 
 # bcoin
 build_and_deploy ./containers/bcoin/bitcoin "provide.network/node/bitcoin/bcoin" "providenetwork-bcoin-node"
-build_and_deploy ./containers/bcoin/handshake "provide.network/node/bitcoin/handshake" "providenetwork-handshake-node"
+# build_and_deploy ./containers/bcoin/handshake "provide.network/node/bitcoin/handshake" "providenetwork-handshake-node"
 
 # # evm
 build_and_deploy ./containers/evm/ewasm "provide.network/node/evm/ewasm" "providenetwork-ewasm-node"
