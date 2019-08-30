@@ -112,7 +112,7 @@ perform_deployment()
     awsRegion=$2
     awsEcrRepoositoryName=$3
     awsEcsTaskDefinitionFamily=$4
-    
+
     if [[ -z "${AWS_ACCOUNT_ID}" || -z "${buildPath}" || -z "${awsRegion}" || -z "${awsEcrRepoositoryName}" || -z "${awsEcsTaskDefinitionFamily}" ]]
     then
         echo '....[PRVD] Skipping container deployment....'
@@ -127,11 +127,11 @@ perform_deployment()
         echo '....create-repository....'
         aws ecr create-repository --repository-name ${awsEcrRepoositoryName} || true
 
-        echo '....list-images....'
-        ecrImageDigest=$(aws ecr list-images --repository-name ${awsEcrRepoositoryName} | jq '.imageIds[0].imageDigest')
+        # echo '....list-images....'
+        # ecrImageDigest=$(aws ecr list-images --repository-name ${awsEcrRepoositoryName} | jq '.imageIds[0].imageDigest')
 
-        echo '....describe-images....'
-        ecrImage=$(aws ecr describe-images --repository-name "${awsEcrRepoositoryName}" --image-ids imageDigest="${ecrImageDigest}" | jq '.')
+        # echo '....describe-images....'
+        # ecrImage=$(aws ecr describe-images --repository-name "${awsEcrRepoositoryName}" --image-ids imageDigest="${ecrImageDigest}" | jq '.')
 
         echo '....load-aws-task-definition-template....'
         ecsTaskDefinition=$(cat "${taskDefinitionFile}" | jq 'del(.taskDefinitionArn) | del(.revision) | del(.status) | del(.compatibilities) | del(.requiresAttributes)')
