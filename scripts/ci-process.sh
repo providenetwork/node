@@ -138,6 +138,7 @@ perform_deployment()
 
         echo '....file manipulation....'
         echo $ecsTaskDefinition > $taskDefinitionFile
+        cat "${taskDefinitionFile}"
         sed -E "s/node:[a-zA-Z0-9\.-]+/node:${buildRef}/g" "./${taskDefinitionFile}" > "./${MUNGED_FILE}"
         sed -E "s/\{\{awsAccountId\}\}/${AWS_ACCOUNT_ID}/g" "./${MUNGED_FILE}" > "./${MUNGED_FILE_TMP}"
         sed -E "s/\{\{awsRegion\}\}/${awsRegion}/g" "./${MUNGED_FILE_TMP}" > "./${MUNGED_FILE}"
