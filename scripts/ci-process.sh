@@ -138,7 +138,6 @@ perform_deployment()
 
         echo '....file manipulation....'
         echo $ecsTaskDefinition > $taskDefinitionFile
-        cat "${taskDefinitionFile}"
         sed -E "s/node:[a-zA-Z0-9\.-]+/node:${buildRef}/g" "./${taskDefinitionFile}" > "./${MUNGED_FILE}"
         sed -E "s/\{\{awsAccountId\}\}/${AWS_ACCOUNT_ID}/g" "./${MUNGED_FILE}" > "./${MUNGED_FILE_TMP}"
         sed -E "s/\{\{awsRegion\}\}/${awsRegion}/g" "./${MUNGED_FILE_TMP}" > "./${MUNGED_FILE}"
@@ -162,15 +161,15 @@ get_build_info
 echo '....[PRVD] AWS Worldwide Distribution....'
 
 # bcoin
-# build_and_deploy ./containers/bcoin/bitcoin "provide.network/node/bcoin" "providenetwork-bcoin-node"
-# build_and_deploy ./containers/bcoin/handshake "provide.network/node/handshake" "providenetwork-handshake-node"
+build_and_deploy ./containers/bcoin/bitcoin "provide.network/node/bitcoin/bcoin" "providenetwork-bcoin-node"
+build_and_deploy ./containers/bcoin/handshake "provide.network/node/bitcoin/handshake" "providenetwork-handshake-node"
 
 # # evm
-# build_and_deploy ./containers/evm/ewasm "provide.network/node/ewasm" "providenetwork-ewasm-node"
-# build_and_deploy ./containers/evm/geth "provide.network/node/geth" "providenetwork-geth-node"
-# build_and_deploy ./containers/evm/parity "provide.network/node/parity" "providenetwork-parity-node"
-# build_and_deploy ./containers/evm/parity-aura-pos "provide.network/node/parity-aura-pos" "providenetwork-parity-aura-pos-node"
-build_and_deploy ./containers/evm/quorum "provide.network/node/quorum" "providenetwork-quorum-node"
+build_and_deploy ./containers/evm/ewasm "provide.network/node/evm/ewasm" "providenetwork-ewasm-node"
+build_and_deploy ./containers/evm/geth "provide.network/node/evm/geth" "providenetwork-geth-node"
+build_and_deploy ./containers/evm/parity "provide.network/node/evm/parity" "providenetwork-parity-node"
+build_and_deploy ./containers/evm/parity-aura-pos "provide.network/node/evm/parity-aura-pos" "providenetwork-parity-aura-pos-node"
+build_and_deploy ./containers/evm/quorum "provide.network/node/evm/quorum" "providenetwork-quorum-node"
 
 # hyperledger
 
