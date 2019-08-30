@@ -5,7 +5,7 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/providenetwork-node",
+          "awslogs-group": "/provide.network/node/evm/ewasm",
           "awslogs-region": "us-east-1",
           "awslogs-stream-prefix": "ecs"
         }
@@ -174,7 +174,7 @@
       "memory": 4096,
       "memoryReservation": 2048,
       "volumesFrom": [],
-      "image": "{{awsAccountId}}.dkr.ecr.{{awsRegion}}.amazonaws.com/provide.network/node:latest",
+      "image": "{{awsAccountId}}.dkr.ecr.{{awsRegion}}.amazonaws.com/provide.network/node/evm/ewasm:latest",
       "name": "node"
     }
   ],
@@ -182,72 +182,9 @@
   "memory": "4096",
   "taskRoleArn": "arn:aws:iam::{{awsAccountId}}:role/ecsTaskExecutionRole",
   "compatibilities": [
-    "EC2",
     "FARGATE"
   ],
-  "family": "providenetwork-node",
-  "requiresAttributes": [
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.17"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "ecs.capability.execution-role-ecr-pull"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "ecs.capability.task-eni"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "com.amazonaws.ecs.capability.ecr-auth"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "com.amazonaws.ecs.capability.task-iam-role"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "ecs.capability.execution-role-awslogs"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
-    }
-  ],
+  "family": "providenetwork-ewasm-node",
   "requiresCompatibilities": [
     "FARGATE"
   ],
