@@ -117,7 +117,7 @@ perform_deployment()
     then
         echo '....[PRVD] Skipping container deployment....'
     else
-        taskDefinitionFile="${buildPath}/ecs-task-definition.json"
+        taskDefinitionFile="./ecs-task-definition.json"
         MUNGED_FILE="${buildPath}/ecs-task-definition-${awsRegion}-UPDATED.json"
         MUNGED_FILE_TMP="${buildPath}/ecs-task-definition-${awsRegion}.tmp.json"
 
