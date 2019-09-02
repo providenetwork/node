@@ -5,7 +5,7 @@ WORKDIR /opt
 
 RUN apt-get update -qq && apt-get upgrade -y && apt-get install -y sudo unattended-upgrades curl wget
 RUN export DISTRO=buster; wget -qO- https://deb.nodesource.com/setup_12.x | sudo -E bash -
-RUN apt-get install -y build-essential automake default-jre libcap2-bin libtool libsodium-dev python3-pip python-setuptools unbound dnsutils libunbound-dev nodejs yasm libudev-dev
+RUN export DISTRO=buster; apt-get install -y build-essential automake default-jre libcap2-bin libtool libsodium-dev python3-pip python-setuptools unbound dnsutils libunbound-dev nodejs yasm libudev-dev
 RUN ln -s $(which nodejs) /usr/local/bin/node
 RUN echo -e "APT::Periodic::Update-Package-Lists \"1\";\nAPT::Periodic::Unattended-Upgrade \"1\";\n" > /etc/apt/apt.conf.d/20auto-upgrades
 
