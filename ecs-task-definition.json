@@ -1,5 +1,5 @@
 {
-    "executionRoleArn": "arn:aws:iam::{{awsAccountId}}:role/AWSServiceRoleForECS",
+    "executionRoleArn": "arn:aws:iam::{{awsAccountId}}:role/ecsTaskExecutionRole",
     "containerDefinitions": [
       {
         "logConfiguration": {
@@ -180,7 +180,7 @@
     ],
     "placementConstraints": [],
     "memory": "4096",
-    "taskRoleArn": "arn:aws:iam::{{awsAccountId}}:role/AWSServiceRoleForECS",
+    "taskRoleArn": "arn:aws:iam::{{awsAccountId}}:role/ecsTaskExecutionRole",
     "compatibilities": [
       "EC2",
       "FARGATE"
