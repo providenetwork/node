@@ -100,8 +100,8 @@ perform_deployment()
         sed -E "s/\{\{awsRegion\}\}/${awsRegion}/g" "./${MUNGED_FILE_TMP}" > "./${MUNGED_FILE}"
 
         echo '....register-task-definition....'
-        ecsTaskDefinition_ID=$(aws ecs register-task-definition --family "${awsEcsTaskDefinitionFamily}" --cli-input-json "file://${MUNGED_FILE}" | jq '.taskDefinition.taskDefinitionArn' | sed -E 's/.*\/(.*)"$/\1/')
-        echo "${ecsTaskDefinition_ID}"
+        ecsTaskDefinitionID=$(aws ecs register-task-definition --family "${AWS_ECS_TASK_DEFINITION_FAMILY}" --cli-input-json "file://${MUNGED_FILE}" | jq '.taskDefinition.taskDefinitionArn' | sed -E 's/.*\/(.*)"$/\1/')
+        echo "${ecsTaskDefinitionID}"
 
         sudo docker tag ${AWS_ECR_REPOSITORY_NAME}:latest "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:${buildRef}"
         sudo docker tag ${AWS_ECR_REPOSITORY_NAME}:latest "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:latest"
