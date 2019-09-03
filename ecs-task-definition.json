@@ -1,5 +1,5 @@
 {
-    "executionRoleArn": "arn:aws:iam::{{awsAccountId}}:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS",
+    "executionRoleArn": "arn:aws:iam::{{awsAccountId}}:role/AWSServiceRoleForECS",
     "containerDefinitions": [
       {
         "logConfiguration": {
@@ -180,7 +180,7 @@
     ],
     "placementConstraints": [],
     "memory": "4096",
-    "taskRoleArn": "arn:aws:iam::{{awsAccountId}}:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS",
+    "taskRoleArn": "arn:aws:iam::{{awsAccountId}}:role/AWSServiceRoleForECS",
     "compatibilities": [
       "EC2",
       "FARGATE"
