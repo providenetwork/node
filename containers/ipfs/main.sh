@@ -16,5 +16,10 @@ then
 
   ipfs config Addresses.API /ip4/0.0.0.0/tcp/${IPFS_API_PORT}
   ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/${IPFS_GATEWAY_PORT}
-  ipfs daemon &
+
+  if [ "$CLIENT" = "ipfs" ]; then
+    ipfs daemon
+  else
+    ipfs daemon &
+  fi
 fi
