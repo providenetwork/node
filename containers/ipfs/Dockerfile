@@ -21,8 +21,8 @@ RUN touch /opt/bootnodes.txt
 ADD main.sh /opt/main.sh
 
 # IPFS installation
-RUN /bin/bash -c 'curl https://dist.ipfs.io/go-ipfs/v0.4.17/go-ipfs_v0.4.17_linux-amd64.tar.gz -L > go-ipfs_v0.4.17_linux-amd64.tar.gz'
-RUN /bin/bash -c 'tar xvvf go-ipfs_v0.4.17_linux-amd64.tar.gz && pushd go-ipfs && ./install.sh && popd'
+RUN /bin/bash -c 'curl https://dist.ipfs.io/go-ipfs/v0.4.22/go-ipfs_v0.4.22_linux-amd64.tar.gz -L > go-ipfs_v0.4.22_linux-amd64.tar.gz'
+RUN /bin/bash -c 'tar xvvf go-ipfs_v0.4.22_linux-amd64.tar.gz && pushd go-ipfs && ./install.sh && popd'
 
 EXPOSE 5001
 EXPOSE 8080
