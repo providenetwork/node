@@ -123,6 +123,13 @@ get_build_info
 echo '....[PRVD] Docker Build....'
 sudo docker build -t "${AWS_ECR_REPOSITORY_NAME}" .
 
+echo '....[PRVD] Docker Hub....'
+sudo docker build -t "${DOCKER_HUB_REPOSITORY_NAME}" .
+sudo docker tag ${DOCKER_HUB_REPOSITORY_NAME}:latest "${DOCKER_HUB_REPOSITORY_NAME}:${buildRef}"
+sudo docker tag ${DOCKER_HUB_REPOSITORY_NAME}:latest "${DOCKER_HUB_REPOSITORY_NAME}:latest"
+sudo docker push "${DOCKER_HUB_REPOSITORY_NAME}:${buildRef}"
+sudo docker push "${DOCKER_HUB_REPOSITORY_NAME}:latest"
+
 echo '....[PRVD] AWS Worldwide Docker Distribution....'
 
 perform_deployment "us-east-1"
