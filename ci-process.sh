@@ -108,10 +108,10 @@ perform_deployment()
         sudo docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:${buildRef}"
         sudo docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com/${AWS_ECR_REPOSITORY_NAME}:latest"
 
-        sudo docker tag ${AWS_ECR_REPOSITORY_NAME}:latest "${AWS_ECR_REPOSITORY_NAME}:${buildRef}"
-        sudo docker tag ${AWS_ECR_REPOSITORY_NAME}:latest "${AWS_ECR_REPOSITORY_NAME}:latest"
-        sudo docker push "${AWS_ECR_REPOSITORY_NAME}:${buildRef}"
-        sudo docker push "${AWS_ECR_REPOSITORY_NAME}:latest"
+        sudo docker tag ${DOCKER_HUB_REPOSITORY_NAME}:latest "${DOCKER_HUB_REPOSITORY_NAME}:${buildRef}"
+        sudo docker tag ${DOCKER_HUB_REPOSITORY_NAME}:latest "${DOCKER_HUB_REPOSITORY_NAME}:latest"
+        sudo docker push "${DOCKER_HUB_REPOSITORY_NAME}:${buildRef}"
+        sudo docker push "${DOCKER_HUB_REPOSITORY_NAME}:latest"
     fi
 }
 
