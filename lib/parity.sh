@@ -14,26 +14,28 @@ if [[ -z "${CHAIN_SPEC}" ]]; then
   CHAIN_SPEC=spec.json
 fi
 
-if [ ! -f "${CHAIN_SPEC}" ] || [ ! -s "${CHAIN_SPEC}" ]; then
-  if [[ -z "${CHAIN_SPEC_URL}" ]]; then
-    CHAIN_SPEC_URL="https://raw.githubusercontent.com/providenetwork/chain-spec/${CHAIN}/spec.json"
-  fi
-  curl -L "${CHAIN_SPEC_URL}" > "${CHAIN_SPEC}" 2> /dev/null
-fi
-
-if [[ -z "${BOOTNODES}" ]]; then
-  if [ ! -f bootnodes.txt ] || [ ! -s bootnodes.txt ]; then
-    if [[ -z "${BOOTNODES_URL}" ]]; then
-      BOOTNODES_URL="https://raw.githubusercontent.com/providenetwork/chain-spec/${CHAIN}/bootnodes.txt"
+if [ "${CHAIN}" != "mainnet" ]; then
+  if [ ! -f "${CHAIN_SPEC}" ] || [ ! -s "${CHAIN_SPEC}" ]; then
+    if [[ -z "${CHAIN_SPEC_URL}" ]]; then
+      CHAIN_SPEC_URL="https://raw.githubusercontent.com/providenetwork/chain-spec/${CHAIN}/spec.json"
     fi
-    curl -L "${BOOTNODES_URL}" > bootnodes.txt 2> /dev/null
-    BOOTNODES=$(cat bootnodes.txt)
-    case $BOOTNODES in  
-      *\ * )
-        echo "Found invalid characters in bootnodes.txt"
-        BOOTNODES=
-        ;;
-    esac
+    curl -L "${CHAIN_SPEC_URL}" > "${CHAIN_SPEC}" 2> /dev/null
+  fi
+
+  if [[ -z "${BOOTNODES}" ]]; then
+    if [ ! -f bootnodes.txt ] || [ ! -s bootnodes.txt ]; then
+      if [[ -z "${BOOTNODES_URL}" ]]; then
+        BOOTNODES_URL="https://raw.githubusercontent.com/providenetwork/chain-spec/${CHAIN}/bootnodes.txt"
+      fi
+      curl -L "${BOOTNODES_URL}" > bootnodes.txt 2> /dev/null
+      BOOTNODES=$(cat bootnodes.txt)
+      case $BOOTNODES in  
+        *\ * )
+          echo "Found invalid characters in bootnodes.txt"
+          BOOTNODES=
+          ;;
+      esac
+    fi
   fi
 fi
 
